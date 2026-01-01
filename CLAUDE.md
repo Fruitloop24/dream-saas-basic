@@ -6,23 +6,23 @@ SaaS starter template with auth, billing, and usage tracking via `@dream-api/sdk
 
 ```bash
 # Install
-cd frontend && npm install
+npm install
 
 # Development
-cd frontend && npm run dev
+npm run dev
 
 # Build
-cd frontend && npm run build
+npm run build
 
-# Deploy (output in frontend/dist/)
+# Deploy (output in dist/)
 ```
 
 ## Quick Setup
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/YOUR_USER/dream-saas-basic.git
-cd dream-saas-basic/frontend
+git clone https://github.com/Fruitloop24/dream-saas-basic.git
+cd dream-saas-basic
 npm install
 
 # 2. Set your publishable key (get from dream-api dashboard)
@@ -47,7 +47,7 @@ npm run dev
 
 Edit the `BRANDING` object in each page:
 
-**`frontend/src/pages/Landing.tsx`**:
+**`src/pages/Landing.tsx`**:
 ```typescript
 const BRANDING = {
   appName: 'YourApp',           // Company/product name
@@ -59,7 +59,7 @@ const BRANDING = {
 };
 ```
 
-**`frontend/src/pages/Dashboard.tsx`**:
+**`src/pages/Dashboard.tsx`**:
 ```typescript
 const BRANDING = {
   appName: 'YourApp',
@@ -68,7 +68,7 @@ const BRANDING = {
 };
 ```
 
-**`frontend/src/pages/ChoosePlanPage.tsx`**:
+**`src/pages/ChoosePlanPage.tsx`**:
 ```typescript
 const BRANDING = {
   primaryColor: '#0f172a',
@@ -79,7 +79,7 @@ const BRANDING = {
 
 The Dashboard has a demo "Track Usage" button. Replace it with your actual product:
 
-**Location:** `frontend/src/pages/Dashboard.tsx` (ACTION AREA section)
+**Location:** `src/pages/Dashboard.tsx` (ACTION AREA section)
 
 ```tsx
 {/* Replace this section with your product UI */}
@@ -96,8 +96,8 @@ The pattern:
 
 ### 3. Add New Pages
 
-1. Create file: `frontend/src/pages/NewPage.tsx`
-2. Add route in `frontend/src/App.tsx`:
+1. Create file: `src/pages/NewPage.tsx`
+2. Add route in `src/App.tsx`:
 
 ```tsx
 <Route
@@ -115,19 +115,18 @@ The pattern:
 ```
 dream-saas-basic/
 ├── CLAUDE.md              # This file (AI instructions)
-├── frontend/
-│   ├── src/
-│   │   ├── App.tsx        # Router + protected routes
-│   │   ├── hooks/
-│   │   │   └── useDreamAPI.tsx  # SDK wrapper - DON'T MODIFY
-│   │   ├── pages/
-│   │   │   ├── Landing.tsx      # Public homepage + pricing
-│   │   │   ├── Dashboard.tsx    # Main app (protected)
-│   │   │   └── ChoosePlanPage.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   ├── .env.example
-│   └── package.json
+├── src/
+│   ├── App.tsx            # Router + protected routes
+│   ├── hooks/
+│   │   └── useDreamAPI.tsx    # SDK wrapper - DON'T MODIFY
+│   ├── pages/
+│   │   ├── Landing.tsx        # Public homepage + pricing
+│   │   ├── Dashboard.tsx      # Main app (protected)
+│   │   └── ChoosePlanPage.tsx
+│   ├── main.tsx
+│   └── index.css
+├── .env.example
+├── package.json
 └── .gitignore
 ```
 
@@ -170,7 +169,7 @@ window.location.href = url;
 
 ### List Tiers (Public)
 ```typescript
-import { dreamAPI } from '../hooks/useDreamAPI';
+import { dreamAPI } from './hooks/useDreamAPI';
 const { tiers } = await dreamAPI.products.listTiers();
 ```
 
@@ -184,7 +183,7 @@ const { tiers } = await dreamAPI.products.listTiers();
 ## Environment Variables
 
 ```env
-# frontend/.env.local
+# .env.local
 VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
 
 # That's it! No secret key in frontend.
@@ -195,15 +194,15 @@ VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
 Works with Vercel, Netlify, Cloudflare Pages:
 
 ```bash
-cd frontend && npm run build
-# Deploy frontend/dist/
+npm run build
+# Deploy dist/
 ```
 
 Set `VITE_DREAM_PUBLISHABLE_KEY` in your host's environment variables.
 
 ## Don't Modify
 
-- `frontend/src/hooks/useDreamAPI.tsx` - SDK wrapper
+- `src/hooks/useDreamAPI.tsx` - SDK wrapper
 - Auth flow logic - handled by SDK
 
 ## Adding More Pages
