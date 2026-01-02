@@ -1,233 +1,119 @@
-# SaaS Template Setup
+# /setup - SaaS Template Setup
 
-Hey! I'm here to help you set up your SaaS app. We'll configure your branding, content, and get you ready to launch.
+You are setting up a Dream API SaaS template. Read the CLAUDE.md file first for full context.
 
-## How This Works
-
-I'll ask you questions one at a time. Answer each one, and I'll update the code for you. At the end, you'll have a fully branded SaaS ready to deploy.
-
----
-
-## Questions (Ask ONE at a time, wait for answer)
-
-### 1. App Name
-"What's the name of your app?"
-
-### 2. Headline
-"What's your main headline? This is the big text visitors see first. Focus on the benefit you provide."
-
-Example: "Automate your workflow in minutes"
-
-### 3. Subheadline
-"Now a supporting line - describe what your app does in one sentence."
-
-Example: "The simple tool that helps teams save 10 hours a week on repetitive tasks."
-
-### 4. How It Works
-"Describe your process in 3 simple steps. What does a user do?"
-
-Example:
-1. Sign up and connect your tools
-2. Set up your automation rules
-3. Watch it work while you focus on what matters
-
-### 5. Features
-"What are 3-6 key features of your product? Give me a title and one-line description for each."
-
-Example:
-- **Smart Automation** - Set rules once, let the system handle the rest
-- **Team Dashboard** - See what everyone's working on in real-time
-- **Integrations** - Connect with the tools you already use
-
-### 6. FAQ
-"What questions do your customers commonly ask? Give me 3-4 questions and answers."
-
-(I'll keep some defaults if you're not sure yet)
-
-### 7. Style
-"What visual style fits your brand?"
-
-- **Minimal** - Clean, professional, understated (zinc/gray tones)
-- **Bold** - Strong colors, high contrast (reds, oranges, violets)
-- **Tech** - Developer-focused, modern (blues, cyans, greens)
-- **Friendly** - Approachable, warm (ambers, pinks)
-
-Based on their choice, suggest colors:
-- Minimal: Keep defaults (zinc)
-- Bold: `#dc2626` red or `#7c3aed` violet
-- Tech: `#0ea5e9` sky or `#10b981` emerald
-- Friendly: `#f59e0b` amber or `#ec4899` pink
-
-Ask: "I suggest [color]. Want this, or give me a hex code?"
-
-### 8. Logo (Optional)
-"Do you have a logo file? If yes, place it in `public/` and tell me the filename. If not, we'll use text."
-
-### 9. Footer Links (Optional)
-"Any footer links? (Privacy policy, terms, contact page, etc.)"
+**Key facts:**
+- SDK is published on npm as `@dream-api/sdk` - just run `npm install`
+- Publishable key (pk_xxx) is SAFE for frontend - like Stripe's publishable key
+- Pricing tiers are configured in the dream-api dashboard - they load via API
+- All branding goes in `src/config.ts` - one file for everything
 
 ---
 
-## After Gathering Info
+## Step 1: API Key (DO THIS FIRST)
 
-Update the `CONTENT` object in `src/pages/Landing.tsx`:
+Ask: **"What's your Dream API publishable key? It starts with `pk_test_` or `pk_live_`."**
 
-```typescript
-const CONTENT = {
-  appName: '[their app name]',
+Explain: "This key is safe for frontend code - it's like Stripe's publishable key. You get it from your dream-api dashboard at [your-dashboard-url]. Your secret key (sk_) stays on your server only."
 
-  hero: {
-    headline: '[their headline]',
-    subheadline: '[their subheadline]',
-    cta: 'Start Free',
-    ctaSubtext: 'No credit card required',
-  },
+Once they provide the key:
 
-  howItWorks: {
-    headline: 'How It Works',
-    subheadline: 'Get started in minutes',
-    steps: [
-      { number: '1', title: '[step 1 title]', description: '[step 1 desc]' },
-      { number: '2', title: '[step 2 title]', description: '[step 2 desc]' },
-      { number: '3', title: '[step 3 title]', description: '[step 3 desc]' },
-    ],
-  },
-
-  features: {
-    headline: 'Everything You Need',
-    subheadline: '[customize or keep]',
-    items: [
-      { title: '[feature 1]', description: '[desc]' },
-      { title: '[feature 2]', description: '[desc]' },
-      // ... more features
-    ],
-  },
-
-  faq: {
-    headline: 'Questions & Answers',
-    items: [
-      { question: '[q1]', answer: '[a1]' },
-      { question: '[q2]', answer: '[a2]' },
-      // ... more FAQ
-    ],
-  },
-
-  finalCta: {
-    headline: 'Ready to get started?',
-    subheadline: '[customize based on their product]',
-    cta: 'Start Free Today',
-  },
-
-  footer: {
-    links: [
-      // Add their links: { label: 'Privacy', href: '/privacy' }
-    ] as Array<{ label: string; href: string }>,
-  },
-};
+1. Create `.env.local`:
+```
+VITE_DREAM_PUBLISHABLE_KEY=[their key]
 ```
 
-Also update `src/pages/Dashboard.tsx` and `src/pages/ChoosePlanPage.tsx`:
-- Change `appName` in the BRANDING object to match
-
-If they have a logo, update the nav in Landing.tsx:
-```tsx
-<Link to="/" className="flex items-center gap-2">
-  <img src="/[their-logo.png]" alt="Logo" className="h-8" />
-  <span className="text-xl font-medium">{CONTENT.appName}</span>
-</Link>
-```
-
----
-
-## Final Steps
-
-After making changes, tell them:
-
-### Summary
-"Your app is configured!"
-- App: [name]
-- Style: [style]
-- Primary Color: [color]
-
-### Run Locally
+2. Run these commands:
 ```bash
 npm install
+```
+
+3. Tell them: "Dependencies installed. Your pricing tiers will load automatically from your dashboard - no configuration needed here."
+
+---
+
+## Step 2: Branding (Quick)
+
+Ask: **"Tell me about your app - what's it called and what does it do? I'll set up the branding."**
+
+From their answer, update `src/config.ts`:
+- `appName` - Their app name
+- `tagline` - Short tagline
+- `hero.headline` - Benefit-focused headline
+- `hero.subheadline` - What it does
+- `howItWorks.steps` - 3 steps based on their product
+- `features.items` - 3-6 features with icons
+
+Available icons: `user`, `settings`, `rocket`, `check`, `chart`, `shield`, `lightning`, `globe`, `clock`, `code`
+
+---
+
+## Step 3: Style
+
+Ask: **"Pick a color: emerald (green), sky (blue), violet (purple), rose (pink), amber (orange), or zinc (gray)?"**
+
+Update `src/config.ts`:
+```typescript
+accentColor: '[their choice]',
+```
+
+---
+
+## Step 4: Logo (Optional)
+
+Ask: **"Got a logo? Drop it in the `public/` folder and tell me the filename. Or skip for text-only."**
+
+If they have one, update `src/config.ts`:
+```typescript
+logo: '/[filename]',
+```
+
+---
+
+## Step 5: Hero Image (Optional)
+
+Ask: **"Want a hero image or screenshot? Drop it in `public/` and tell me the filename. Or skip for text-only hero."**
+
+If they have one, update `src/config.ts`:
+```typescript
+hero: {
+  // ... other fields
+  image: '/[filename]',
+},
+```
+
+---
+
+## Done
+
+Run:
+```bash
 npm run dev
 ```
 
-### Set Your API Key
-"Create `.env.local` and add your publishable key from dream-api dashboard:"
-```
-VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-```
-
-### Create Your Tiers
-"Log into your dream-api dashboard and create your pricing tiers. They'll automatically appear on your pricing page."
-
-### Customize the Dashboard
-"The Dashboard page (`src/pages/Dashboard.tsx`) has a demo 'Track Usage' button. Replace that section with your actual product feature."
+Tell them:
+- "Your app is running at http://localhost:5173"
+- "Pricing tiers load from your dream-api dashboard"
+- "Auth, billing, and usage tracking are all wired up"
+- "Edit `src/config.ts` anytime to change branding"
+- "Edit `src/pages/Dashboard.tsx` to add your actual product features"
 
 ---
 
-## Deployment
+## Reference
 
-Ask: "Ready to deploy? I can help you set up:"
-
-### Option 1: Cloudflare Pages (Recommended)
-```bash
-npm run build
-npx wrangler pages deploy dist --project-name=[app-name]
-```
-- Free SSL, global CDN, automatic deploys from GitHub
-
-### Option 2: GitHub Pages
-```bash
-npm run build
-# Push dist/ to gh-pages branch
-```
-
-### Option 3: Vercel / Netlify
-```bash
-npm run build
-# Connect your repo, set VITE_DREAM_PUBLISHABLE_KEY in environment
-```
+See CLAUDE.md for:
+- SDK methods (`api.usage.track()`, `api.billing.createCheckout()`, etc.)
+- File structure
+- What not to modify
+- Deployment instructions
 
 ---
 
-## What NOT To Do
+## If Things Go Wrong
 
-When customizing this template:
+**"npm install failed"** - Check Node version (need 18+), try `rm -rf node_modules && npm install`
 
-1. **Don't modify `src/hooks/useDreamAPI.tsx`** - This handles auth correctly
-2. **Don't build custom sign-up forms** - Use `dreamAPI.auth.getSignUpUrl()`
-3. **Don't build custom sign-in forms** - Use `dreamAPI.auth.getSignInUrl()`
-4. **Don't add "delete account" buttons** - Users manage accounts via `dreamAPI.auth.getCustomerPortalUrl()`
-5. **Don't put SK in frontend code** - Only PK goes in the browser
+**"Tiers not loading"** - Check publishable key in `.env.local`, make sure it matches dashboard
 
----
-
-## Common Customizations
-
-If they ask for:
-
-**Adding a new page:**
-1. Create `src/pages/NewPage.tsx`
-2. Add route in `src/App.tsx`
-3. Wrap in `<ProtectedRoute>` if it needs auth
-
-**Adding product features:**
-Replace the demo card in Dashboard.tsx with their actual UI. Call `api.usage.track()` when users do billable actions.
-
-**Custom pricing display:**
-The pricing section pulls from the API automatically. Customize the display in Landing.tsx but don't hardcode prices.
-
-**Adding social proof logos:**
-Update the `socialProof.logos` array in CONTENT with image paths.
-
----
-
-## Need More Help?
-
-- **SDK Reference:** See `docs/SDK-GUIDE.md` in the main dream-api repo
-- **API Endpoints:** See `docs/API-REFERENCE.md`
-- **Issues:** https://github.com/dream-api/sdk/issues
+**"Auth not working"** - The SDK handles this automatically. Don't build custom auth forms.

@@ -1,19 +1,15 @@
 /**
  * CHOOSE PLAN - Pricing selection (protected)
+ *
+ * Uses shared config from src/config.ts
  */
 
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
+import { CONFIG, getAccentClasses } from '../config';
+import Nav from '../components/Nav';
 import type { Tier } from '@dream-api/sdk';
-
-// ============================================================================
-// BRANDING
-// ============================================================================
-const BRANDING = {
-  appName: 'YourApp',
-  primaryColor: '#18181b',
-};
 
 export default function ChoosePlanPage() {
   const { api, isReady, user } = useDreamAPI();
@@ -25,7 +21,7 @@ export default function ChoosePlanPage() {
   const [upgrading, setUpgrading] = useState<string | null>(null);
 
   const currentPlan = user?.plan || 'free';
-  const { appName, primaryColor } = BRANDING;
+  const accent = getAccentClasses();
 
   useEffect(() => {
     async function loadTiers() {
@@ -85,17 +81,8 @@ export default function ChoosePlanPage() {
 
   return (
     <div className="min-h-screen bg-zinc-950">
-      {/* Header */}
-      <nav className="border-b border-zinc-900 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-xl font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
-            {appName}
-          </Link>
-          <Link to="/dashboard" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
-            &larr; Back to Dashboard
-          </Link>
-        </div>
-      </nav>
+      {/* Shared Nav with profile dropdown */}
+      <Nav />
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         {/* Title */}
@@ -104,7 +91,7 @@ export default function ChoosePlanPage() {
           <p className="text-zinc-500">Upgrade or change your subscription</p>
           {currentPlan && (
             <p className="mt-2 text-sm text-zinc-600">
-              Current plan: <span className="text-zinc-400">{currentPlan.toUpperCase()}</span>
+              Current plan: <span className={accent.text}>{currentPlan.toUpperCase()}</span>
             </p>
           )}
         </div>
@@ -117,39 +104,33 @@ export default function ChoosePlanPage() {
         )}
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className={`grid gap-6 ${tiers.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : tiers.length >= 3 ? 'md:grid-cols-3' : ''}`}>
           {tiers.map((tier, index) => {
             const isCurrentPlan = tier.name === currentPlan;
             const isUpgrading = upgrading === tier.name;
-            const isPopular = index === 1;
+            const isPopular = tier.popular || index === Math.floor(tiers.length / 2);
 
             return (
               <div
                 key={tier.name}
-                className={`relative bg-zinc-900/50 rounded-lg p-6 transition-colors ${
+                className={`relative bg-zinc-900/50 rounded-xl p-6 transition-colors ${
                   isCurrentPlan
-                    ? 'border-2 border-emerald-500/50'
+                    ? `border-2 ${accent.border}`
                     : isPopular
-                    ? 'border-2 border-emerald-500/30'
+                    ? `border-2 ${accent.border} opacity-80`
                     : 'border border-zinc-800 hover:border-zinc-700'
                 }`}
               >
                 {/* Popular badge */}
                 {isPopular && !isCurrentPlan && (
-                  <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-medium rounded text-white"
-                    style={{ backgroundColor: primaryColor }}
-                  >
+                  <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-medium rounded ${accent.bg} text-white`}>
                     POPULAR
                   </div>
                 )}
 
                 {/* Current plan badge */}
                 {isCurrentPlan && (
-                  <div
-                    className="mb-4 inline-block px-2 py-1 text-xs font-medium rounded text-white"
-                    style={{ backgroundColor: primaryColor }}
-                  >
+                  <div className={`mb-4 inline-block px-2 py-1 text-xs font-medium rounded ${accent.bg} text-white`}>
                     CURRENT
                   </div>
                 )}
@@ -170,20 +151,15 @@ export default function ChoosePlanPage() {
                 <button
                   onClick={() => handleSelectPlan(tier)}
                   disabled={isCurrentPlan || isUpgrading}
-                  className={`w-full py-2.5 rounded text-sm font-medium transition-colors ${
+                  className={`w-full py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isCurrentPlan
                       ? 'bg-zinc-800 text-zinc-500 cursor-default'
                       : isUpgrading
                       ? 'bg-zinc-800 text-zinc-500 cursor-wait'
                       : tier.price === 0
                       ? 'border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600'
-                      : 'text-white hover:opacity-90'
+                      : `${accent.bg} text-white ${accent.bgHover}`
                   }`}
-                  style={
-                    !isCurrentPlan && !isUpgrading && tier.price > 0
-                      ? { backgroundColor: primaryColor }
-                      : undefined
-                  }
                 >
                   {isCurrentPlan
                     ? 'Current Plan'
@@ -198,7 +174,9 @@ export default function ChoosePlanPage() {
                   <ul className="mt-6 space-y-2">
                     {tier.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-zinc-500 text-sm">
-                        <span className="w-1 h-1 bg-zinc-600 rounded-full mt-2 flex-shrink-0"></span>
+                        <svg className={`w-4 h-4 mt-0.5 ${accent.text} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
                         {feature}
                       </li>
                     ))}

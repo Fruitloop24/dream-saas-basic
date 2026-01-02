@@ -1,21 +1,14 @@
 /**
  * DASHBOARD - Protected user dashboard
  *
- * Customize this page for your SaaS product.
+ * Uses shared config from src/config.ts
  */
 
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDreamAPI } from '../hooks/useDreamAPI';
-
-// ============================================================================
-// BRANDING - Customize these values
-// ============================================================================
-const BRANDING = {
-  appName: 'YourApp',
-  description: 'Your product description here',
-  primaryColor: '#18181b',
-};
+import { CONFIG, getAccentClasses, getAccentHex } from '../config';
+import Nav from '../components/Nav';
 
 interface UsageData {
   usageCount: number;
@@ -25,7 +18,7 @@ interface UsageData {
 }
 
 export default function Dashboard() {
-  const { api, isReady, user, signOut, refreshUser } = useDreamAPI();
+  const { api, isReady, user, refreshUser } = useDreamAPI();
   const navigate = useNavigate();
 
   const [usage, setUsage] = useState<UsageData | null>(null);
@@ -33,7 +26,8 @@ export default function Dashboard() {
   const [message, setMessage] = useState('');
   const [searchParams] = useSearchParams();
 
-  const { appName, primaryColor } = BRANDING;
+  const accent = getAccentClasses();
+  const accentHex = getAccentHex();
   const plan = user?.plan || 'free';
 
   const fetchUsage = useCallback(async () => {
@@ -77,23 +71,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleChangePlan = () => navigate('/choose-plan');
-
-  const handleManageBilling = async () => {
-    if (!isReady) return;
-    try {
-      const result = await api.billing.openPortal({ returnUrl: window.location.href });
-      if (result.url) window.location.href = result.url;
-    } catch (error) {
-      console.error('Billing portal error:', error);
-    }
-  };
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
   useEffect(() => {
     const success = searchParams.get('success');
     if (success === 'true') {
@@ -112,37 +89,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-zinc-950">
-      {/* Navigation */}
-      <nav className="border-b border-zinc-900 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-xl font-medium text-zinc-100 hover:text-zinc-300 transition-colors">
-            {appName}
-          </Link>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handleChangePlan}
-              className="px-4 py-2 text-sm font-medium rounded transition-colors text-white"
-              style={{ backgroundColor: primaryColor }}
-            >
-              {plan === 'free' ? 'Upgrade' : 'Change Plan'}
-            </button>
-            {plan !== 'free' && (
-              <button
-                onClick={handleManageBilling}
-                className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
-              >
-                Billing
-              </button>
-            )}
-            <button
-              onClick={handleSignOut}
-              className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </nav>
+      {/* Shared Nav with profile dropdown */}
+      <Nav />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
@@ -165,7 +113,7 @@ export default function Dashboard() {
         {/* Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Usage Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Usage This Month</h2>
             {usage ? (
               <>
@@ -178,20 +126,16 @@ export default function Dashboard() {
                 {usage.limit !== 'unlimited' && (
                   <div className="w-full bg-zinc-800 rounded-full h-2 mb-4">
                     <div
-                      className="h-2 rounded-full transition-all"
+                      className={`h-2 rounded-full transition-all ${accent.bg}`}
                       style={{
                         width: `${Math.min((usage.usageCount / Number(usage.limit)) * 100, 100)}%`,
-                        backgroundColor: primaryColor
                       }}
                     />
                   </div>
                 )}
                 <div className="flex items-center gap-2">
                   <span className="text-zinc-500 text-sm">Plan:</span>
-                  <span
-                    className="px-2 py-0.5 text-xs font-medium rounded text-white"
-                    style={{ backgroundColor: primaryColor }}
-                  >
+                  <span className={`px-2 py-0.5 text-xs font-medium rounded ${accent.bg} text-white`}>
                     {plan.toUpperCase()}
                   </span>
                 </div>
@@ -201,8 +145,8 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Demo Action Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+          {/* Demo Action Card - REPLACE THIS WITH YOUR PRODUCT */}
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Demo Action</h2>
             <p className="text-zinc-400 text-sm mb-4">
               Replace this with your product's main action. Each click tracks usage.
@@ -210,12 +154,11 @@ export default function Dashboard() {
             <button
               onClick={handleTrackUsage}
               disabled={loading || !isReady}
-              className={`w-full py-3 text-sm font-medium rounded transition-colors ${
+              className={`w-full py-3 text-sm font-medium rounded-lg transition-colors ${
                 loading || !isReady
                   ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-                  : 'text-white hover:opacity-90'
+                  : `${accent.bg} text-white ${accent.bgHover}`
               }`}
-              style={!loading && isReady ? { backgroundColor: primaryColor } : undefined}
             >
               {loading ? 'Processing...' : 'Track Usage'}
             </button>
@@ -224,15 +167,14 @@ export default function Dashboard() {
 
         {/* Upgrade CTA */}
         {plan === 'free' && (
-          <div className="mt-8 bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
-            <h3 className="text-lg font-medium text-zinc-100 mb-2">Upgrade to Pro</h3>
+          <div className="mt-8 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <h3 className="text-lg font-medium text-zinc-100 mb-2">Upgrade Your Plan</h3>
             <p className="text-zinc-500 text-sm mb-4">
               Remove limits and unlock all features
             </p>
             <button
-              onClick={handleChangePlan}
-              className="px-6 py-2.5 text-sm font-medium rounded text-white hover:opacity-90 transition-colors"
-              style={{ backgroundColor: primaryColor }}
+              onClick={() => navigate('/choose-plan')}
+              className={`px-6 py-2.5 text-sm font-medium rounded-lg ${accent.bg} text-white ${accent.bgHover} transition-colors`}
             >
               View Plans
             </button>
