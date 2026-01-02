@@ -1,24 +1,10 @@
 /**
- * ============================================================================
- * CHOOSE PLAN PAGE - PRICING SELECTION (Protected Route)
- * ============================================================================
- *
- * Uses @dream-api/sdk for tiers and checkout.
- * NO Clerk imports - SDK handles auth internally.
- *
- * ============================================================================
+ * CHOOSE PLAN - Pricing selection (protected)
  */
 
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
-
-// ============================================================================
-// AI: CUSTOMIZE THESE VALUES FOR YOUR BRAND
-// ============================================================================
-const BRANDING = {
-  primaryColor: '#0f172a',
-};
 
 interface Tier {
   name: string;
@@ -38,10 +24,8 @@ export default function ChoosePlanPage() {
   const [error, setError] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState<string | null>(null);
 
-  const { primaryColor } = BRANDING;
   const currentPlan = user?.plan || 'free';
 
-  // Load tiers from SDK
   useEffect(() => {
     async function loadTiers() {
       try {
@@ -57,7 +41,6 @@ export default function ChoosePlanPage() {
     loadTiers();
   }, []);
 
-  // Handle plan selection
   const handleSelectPlan = async (tier: Tier) => {
     if (tier.name === 'free' || tier.price === 0) {
       navigate('/dashboard');
@@ -65,7 +48,7 @@ export default function ChoosePlanPage() {
     }
 
     if (!isReady) {
-      setError('Please wait, loading...');
+      setError('Please wait...');
       return;
     }
 
@@ -86,115 +69,106 @@ export default function ChoosePlanPage() {
       }
     } catch (err: any) {
       console.error('Checkout error:', err);
-      setError(err.message || 'Something went wrong. Please try again.');
+      setError(err.message || 'Something went wrong');
       setUpgrading(null);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <p className="text-slate-600">Loading pricing...</p>
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-zinc-950">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-4">
-        <Link to="/dashboard" className="text-slate-600 hover:text-slate-900 no-underline">
-          ← Back to Dashboard
-        </Link>
+      <div className="border-b border-zinc-900 px-6 py-4">
+        <div className="max-w-6xl mx-auto">
+          <Link to="/dashboard" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
+            &larr; Back to Dashboard
+          </Link>
+        </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-8 py-16">
-        {/* Page Title */}
+      <div className="max-w-5xl mx-auto px-6 py-16">
+        {/* Title */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-3">Choose Your Plan</h1>
-          <p className="text-xl text-slate-600">Upgrade or change your subscription</p>
+          <h1 className="text-3xl font-light text-zinc-100 mb-3">Choose Your Plan</h1>
+          <p className="text-zinc-500">Upgrade or change your subscription</p>
           {currentPlan && (
-            <p className="mt-2 text-sm text-slate-500">
-              Current plan: <span className="font-semibold">{currentPlan.toUpperCase()}</span>
+            <p className="mt-2 text-sm text-zinc-600">
+              Current plan: <span className="text-zinc-400">{currentPlan.toUpperCase()}</span>
             </p>
           )}
         </div>
 
-        {/* Error Message */}
+        {/* Error */}
         {error && (
-          <div className="mb-8 max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800 text-center">{error}</p>
+          <div className="mb-8 max-w-md mx-auto bg-red-950/50 border border-red-900 rounded-lg p-4">
+            <p className="text-red-400 text-center text-sm">{error}</p>
           </div>
         )}
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {tiers.map((tier, index) => {
             const isCurrentPlan = tier.name === currentPlan;
             const isUpgrading = upgrading === tier.name;
-            const isPopular = index === 1; // Middle tier is popular
+            const isPopular = index === 1;
 
             return (
               <div
                 key={tier.name}
-                className={`relative bg-white p-8 rounded-2xl border-2 transition-all ${
+                className={`relative bg-zinc-900/50 rounded-lg p-6 transition-colors ${
                   isCurrentPlan
-                    ? 'border-slate-900 shadow-lg'
+                    ? 'border-2 border-zinc-600'
                     : isPopular
-                    ? 'border-blue-500 shadow-lg'
-                    : 'border-gray-200 hover:border-gray-300 hover:shadow-lg'
+                    ? 'border-2 border-zinc-700'
+                    : 'border border-zinc-800 hover:border-zinc-700'
                 }`}
               >
                 {/* Popular badge */}
                 {isPopular && !isCurrentPlan && (
-                  <div
-                    className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 text-white text-xs font-bold rounded"
-                    style={{ backgroundColor: primaryColor }}
-                  >
-                    MOST POPULAR
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-zinc-700 text-zinc-200 text-xs font-medium rounded">
+                    POPULAR
                   </div>
                 )}
 
                 {/* Current plan badge */}
                 {isCurrentPlan && (
-                  <div
-                    className="mb-4 inline-block px-3 py-1 text-white text-xs font-bold rounded"
-                    style={{ backgroundColor: primaryColor }}
-                  >
-                    CURRENT PLAN
+                  <div className="mb-4 inline-block px-2 py-1 bg-zinc-700 text-zinc-300 text-xs font-medium rounded">
+                    CURRENT
                   </div>
                 )}
 
-                {/* Tier Name */}
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                <h3 className="text-lg font-medium text-zinc-100 mb-2">
                   {tier.displayName || tier.name}
                 </h3>
 
-                {/* Price */}
-                <div className="mb-6">
-                  <span className="text-5xl font-bold text-slate-900">${tier.price}</span>
-                  <span className="text-slate-600">/month</span>
+                <div className="mb-4">
+                  <span className="text-3xl font-light text-zinc-200">${tier.price}</span>
+                  <span className="text-zinc-500 text-sm">/month</span>
                 </div>
 
-                {/* Limit */}
-                <p className="text-slate-600 mb-6 text-lg">
+                <p className="text-zinc-500 text-sm mb-6">
                   {tier.limit === -1 ? 'Unlimited requests' : `${tier.limit.toLocaleString()} requests/month`}
                 </p>
 
-                {/* CTA Button */}
                 <button
                   onClick={() => handleSelectPlan(tier)}
                   disabled={isCurrentPlan || isUpgrading}
-                  className={`w-full py-3 rounded-lg font-semibold transition-opacity ${
+                  className={`w-full py-2.5 rounded text-sm font-medium transition-colors ${
                     isCurrentPlan
-                      ? 'bg-slate-200 text-slate-600 cursor-not-allowed'
+                      ? 'bg-zinc-800 text-zinc-500 cursor-default'
                       : isUpgrading
-                      ? 'bg-slate-300 text-slate-600 cursor-wait'
+                      ? 'bg-zinc-800 text-zinc-500 cursor-wait'
                       : tier.price === 0
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300'
-                      : 'text-white hover:opacity-90'
+                      ? 'border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600'
+                      : 'bg-zinc-100 text-zinc-900 hover:bg-white'
                   }`}
-                  style={!isCurrentPlan && !isUpgrading && tier.price > 0 ? { backgroundColor: primaryColor } : undefined}
                 >
                   {isCurrentPlan
                     ? 'Current Plan'
@@ -205,13 +179,12 @@ export default function ChoosePlanPage() {
                     : 'Upgrade'}
                 </button>
 
-                {/* Features */}
                 {tier.features && tier.features.length > 0 && (
-                  <ul className="mt-8 space-y-3">
+                  <ul className="mt-6 space-y-2">
                     {tier.features.map((feature, i) => (
-                      <li key={i} className="flex items-start text-slate-600 text-sm">
-                        <span className="mr-2">✓</span>
-                        <span>{feature}</span>
+                      <li key={i} className="flex items-start gap-2 text-zinc-500 text-sm">
+                        <span className="w-1 h-1 bg-zinc-600 rounded-full mt-2 flex-shrink-0"></span>
+                        {feature}
                       </li>
                     ))}
                   </ul>
@@ -221,10 +194,10 @@ export default function ChoosePlanPage() {
           })}
         </div>
 
-        {/* Footer Note */}
-        <div className="mt-12 text-center">
-          <p className="text-slate-500 text-sm">
-            All plans include access to core features • Cancel anytime
+        {/* Footer */}
+        <div className="mt-10 text-center">
+          <p className="text-zinc-600 text-sm">
+            All plans include core features &middot; Cancel anytime
           </p>
         </div>
       </div>

@@ -1,20 +1,13 @@
 # dream-saas-basic
 
-SaaS starter template with auth, billing, and usage tracking via `@dream-api/sdk`.
+Minimal SaaS starter with auth, billing, and usage tracking via `@dream-api/sdk`.
 
 ## Commands
 
 ```bash
-# Install
-npm install
-
-# Development
-npm run dev
-
-# Build
-npm run build
-
-# Deploy (output in dist/)
+npm install    # Install dependencies
+npm run dev    # Start dev server
+npm run build  # Build for production
 ```
 
 ## Quick Setup
@@ -25,7 +18,7 @@ git clone https://github.com/Fruitloop24/dream-saas-basic.git
 cd dream-saas-basic
 npm install
 
-# 2. Set your publishable key (get from dream-api dashboard)
+# 2. Set your publishable key
 cp .env.example .env.local
 # Edit: VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
 
@@ -36,119 +29,102 @@ npm run dev
 ## What's Included
 
 - Landing page with pricing
-- User authentication (Clerk)
-- Dashboard with usage tracking
-- Plan selection & Stripe checkout
-- Billing portal access
-
-## Customization Guide
-
-### 1. Branding (Start Here)
-
-Edit the `BRANDING` object in each page:
-
-**`src/pages/Landing.tsx`**:
-```typescript
-const BRANDING = {
-  appName: 'YourApp',           // Company/product name
-  valueProp: 'Your Headline',   // Hero section headline
-  description: 'What you do',   // One-liner description
-  primaryColor: '#0f172a',      // Brand color (hex)
-  logoUrl: '',                  // Optional: logo image URL
-  heroImageUrl: '',             // Optional: hero section image
-};
-```
-
-**`src/pages/Dashboard.tsx`**:
-```typescript
-const BRANDING = {
-  appName: 'YourApp',
-  description: 'Your product description',
-  primaryColor: '#0f172a',
-};
-```
-
-**`src/pages/ChoosePlanPage.tsx`**:
-```typescript
-const BRANDING = {
-  primaryColor: '#0f172a',
-};
-```
-
-### 2. Replace the Demo Feature
-
-The Dashboard has a demo "Track Usage" button. Replace it with your actual product:
-
-**Location:** `src/pages/Dashboard.tsx` (ACTION AREA section)
-
-```tsx
-{/* Replace this section with your product UI */}
-<div className="bg-white p-8 rounded-xl border border-gray-200">
-  <h2>Your Feature</h2>
-  <button onClick={makeRequest}>Do Something</button>
-</div>
-```
-
-The pattern:
-1. Call your API/feature
-2. Track usage with `api.usage.track()`
-3. Update UI with results
-
-### 3. Add New Pages
-
-1. Create file: `src/pages/NewPage.tsx`
-2. Add route in `src/App.tsx`:
-
-```tsx
-<Route
-  path="/new-feature"
-  element={
-    <ProtectedRoute>
-      <NewPage />
-    </ProtectedRoute>
-  }
-/>
-```
+- User auth (Clerk integration)
+- Protected dashboard
+- Usage tracking sidebar
+- Plan selection + Stripe checkout
+- Billing portal for paid users
 
 ## File Structure
 
 ```
 dream-saas-basic/
-├── CLAUDE.md              # This file (AI instructions)
 ├── src/
-│   ├── App.tsx            # Router + protected routes
+│   ├── App.tsx              # Router + protected routes
+│   ├── main.tsx             # Entry point
+│   ├── index.css            # Tailwind
 │   ├── hooks/
-│   │   └── useDreamAPI.tsx    # SDK wrapper - DON'T MODIFY
-│   ├── pages/
-│   │   ├── Landing.tsx        # Public homepage + pricing
-│   │   ├── Dashboard.tsx      # Main app (protected)
-│   │   └── ChoosePlanPage.tsx
-│   ├── main.tsx
-│   └── index.css
-├── .env.example
-├── package.json
-└── .gitignore
+│   │   └── useDreamAPI.tsx  # SDK wrapper (don't modify)
+│   └── pages/
+│       ├── Landing.tsx      # Public homepage
+│       ├── Dashboard.tsx    # Main app (protected)
+│       └── ChoosePlanPage.tsx
+├── .claude/
+│   └── commands/
+│       └── setup.md         # AI setup command
+├── CLAUDE.md                # This file
+└── .env.example
 ```
+
+## Customization
+
+### Branding
+
+Edit the `BRANDING` object in each page:
+
+**src/pages/Landing.tsx:**
+```typescript
+const BRANDING = {
+  appName: 'YourApp',
+  tagline: 'Your headline goes here',
+  description: 'What your product does.',
+  primaryColor: '#18181b',
+  accentColor: '#3f3f46',
+};
+```
+
+**src/pages/Dashboard.tsx:**
+```typescript
+const BRANDING = {
+  appName: 'YourApp',
+  description: 'Your product description',
+  primaryColor: '#18181b',
+};
+```
+
+### Style Presets
+
+**Minimal (default)**
+```typescript
+primaryColor: '#18181b', accentColor: '#3f3f46'
+```
+
+**Tech**
+```typescript
+primaryColor: '#0ea5e9', accentColor: '#06b6d4'  // Sky/Cyan
+primaryColor: '#10b981', accentColor: '#22c55e'  // Emerald
+```
+
+**Bold**
+```typescript
+primaryColor: '#7c3aed', accentColor: '#a855f7'  // Violet
+primaryColor: '#dc2626', accentColor: '#ea580c'  // Red/Orange
+```
+
+### Replace the Demo Feature
+
+The Dashboard has a demo "Track Usage" button. Replace it with your product:
+
+**Location:** `src/pages/Dashboard.tsx` (Main Content section)
+
+Pattern:
+1. User does something
+2. Call your API/logic
+3. Track usage: `await api.usage.track()`
+4. Show results
 
 ## SDK Patterns
 
-### Check Auth State
+### Auth State
 ```typescript
 const { isReady, isSignedIn, user } = useDreamAPI();
-if (!isReady) return <Loading />;
-if (!isSignedIn) return <SignInPrompt />;
-```
-
-### Get User's Plan
-```typescript
-const { user } = useDreamAPI();
 const plan = user?.plan || 'free';
 ```
 
 ### Track Usage
 ```typescript
 const { api } = useDreamAPI();
-const result = await api.usage.track();
+await api.usage.track();
 ```
 
 ### Check Usage
@@ -173,44 +149,60 @@ import { dreamAPI } from './hooks/useDreamAPI';
 const { tiers } = await dreamAPI.products.listTiers();
 ```
 
-## Auth Flow
+## Adding Pages
 
-1. User clicks "Sign Up" → Clerk hosted signup
-2. User creates account (email/Google)
-3. Redirected back, already logged in
-4. SDK auto-initializes auth state
+1. Create `src/pages/NewPage.tsx`
+2. Add route in `src/App.tsx`:
 
-## Environment Variables
+```tsx
+<Route
+  path="/new-feature"
+  element={
+    <ProtectedRoute>
+      <NewPage />
+    </ProtectedRoute>
+  }
+/>
+```
+
+## Environment
 
 ```env
 # .env.local
 VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-
-# That's it! No secret key in frontend.
 ```
+
+No secret key needed in frontend.
 
 ## Deployment
 
-Works with Vercel, Netlify, Cloudflare Pages:
-
 ```bash
 npm run build
-# Deploy dist/
+# Deploy dist/ to Cloudflare Pages, Vercel, Netlify
 ```
 
-Set `VITE_DREAM_PUBLISHABLE_KEY` in your host's environment variables.
+Set `VITE_DREAM_PUBLISHABLE_KEY` in host environment.
+
+## How It Works
+
+### Auth Flow
+1. User clicks "Sign Up" → Clerk hosted signup
+2. Account created → redirected back logged in
+3. SDK auto-initializes auth
+
+### Billing Flow
+1. User clicks "Upgrade" → choose plan page
+2. Selects tier → Stripe Checkout
+3. Payment complete → redirect with `?success=true`
+4. Plan updated in user metadata
+
+### Usage Flow
+1. User does action → `api.usage.track()`
+2. Count increments in D1
+3. `api.usage.check()` returns current/limit/remaining
+4. Limit hit → return error (enforce in your logic)
 
 ## Don't Modify
 
-- `src/hooks/useDreamAPI.tsx` - SDK wrapper
-- Auth flow logic - handled by SDK
-
-## Adding More Pages
-
-Common additions:
-- `/features` - Feature showcase
-- `/about` - About page
-- `/pricing` - Dedicated pricing (currently on landing)
-- `/docs` - Documentation
-
-Just create the page component and add a route in App.tsx.
+- `src/hooks/useDreamAPI.tsx` - SDK wrapper handles auth
+- Auth flow logic - managed by SDK internally

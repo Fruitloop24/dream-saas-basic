@@ -19,16 +19,14 @@ import ChoosePlanPage from './pages/ChoosePlanPage'
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isReady, isSignedIn } = useDreamAPI();
 
-  // Show loading while SDK initializes
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <p className="text-slate-600">Loading...</p>
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin"></div>
       </div>
     );
   }
 
-  // Redirect to landing if not signed in
   if (!isSignedIn) {
     return <Navigate to="/" replace />;
   }
