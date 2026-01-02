@@ -1,5 +1,7 @@
 /**
- * DASHBOARD - Main application page (protected)
+ * DASHBOARD - Protected user dashboard
+ *
+ * Customize this page for your SaaS product.
  */
 
 import { useEffect, useState, useCallback } from 'react';
@@ -7,11 +9,11 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDreamAPI } from '../hooks/useDreamAPI';
 
 // ============================================================================
-// BRANDING - Customize these values for your app
+// BRANDING - Customize these values
 // ============================================================================
 const BRANDING = {
   appName: 'YourApp',
-  description: 'Your product description goes here',
+  description: 'Your product description here',
   primaryColor: '#18181b',
 };
 
@@ -31,7 +33,7 @@ export default function Dashboard() {
   const [message, setMessage] = useState('');
   const [searchParams] = useSearchParams();
 
-  const { appName, description } = BRANDING;
+  const { appName, primaryColor } = BRANDING;
   const plan = user?.plan || 'free';
 
   const fetchUsage = useCallback(async () => {
@@ -49,24 +51,29 @@ export default function Dashboard() {
     }
   }, [api, isReady]);
 
-  const makeRequest = async () => {
-    if (!isReady) {
-      setMessage('Please wait...');
-      return;
-    }
-
+  // Demo: Track usage when button clicked
+  const handleTrackUsage = async () => {
+    if (!isReady) return;
     setLoading(true);
     setMessage('');
+
     try {
       const result = await api.usage.track();
       if (result.success) {
-        setMessage('Request tracked successfully');
+        setMessage('Usage tracked successfully!');
         await fetchUsage();
+      } else {
+        setMessage('Usage limit reached. Please upgrade.');
       }
     } catch (error: any) {
-      setMessage(error.message || 'Request failed');
+      if (error.message?.includes('limit')) {
+        setMessage('Usage limit reached. Please upgrade.');
+      } else {
+        setMessage(error.message || 'Something went wrong');
+      }
     } finally {
       setLoading(false);
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -76,9 +83,7 @@ export default function Dashboard() {
     if (!isReady) return;
     try {
       const result = await api.billing.openPortal({ returnUrl: window.location.href });
-      if (result.url) {
-        window.location.href = result.url;
-      }
+      if (result.url) window.location.href = result.url;
     } catch (error) {
       console.error('Billing portal error:', error);
     }
@@ -110,118 +115,124 @@ export default function Dashboard() {
       {/* Navigation */}
       <nav className="border-b border-zinc-900 px-6 py-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-xl font-medium text-zinc-100 hover:text-white transition-colors">
+          <Link to="/" className="text-xl font-medium text-zinc-100 hover:text-zinc-300 transition-colors">
             {appName}
           </Link>
           <div className="flex items-center gap-4">
             <button
               onClick={handleChangePlan}
-              className="px-4 py-2 text-sm font-medium rounded transition-colors bg-zinc-100 text-zinc-900 hover:bg-white"
+              className="px-4 py-2 text-sm font-medium rounded transition-colors text-white"
+              style={{ backgroundColor: primaryColor }}
             >
               {plan === 'free' ? 'Upgrade' : 'Change Plan'}
             </button>
             {plan !== 'free' && (
               <button
                 onClick={handleManageBilling}
-                className="px-4 py-2 text-sm font-medium rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"
+                className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
               >
                 Billing
               </button>
             )}
-            <div className="flex items-center gap-3 ml-2">
-              <span className="text-zinc-500 text-sm">{user?.email}</span>
-              <button
-                onClick={handleSignOut}
-                className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
-              >
-                Sign Out
-              </button>
-            </div>
+            <button
+              onClick={handleSignOut}
+              className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-light text-zinc-100 mb-2">Dashboard</h1>
-          <p className="text-zinc-500">{description}</p>
+        <div className="mb-8">
+          <h1 className="text-2xl font-light text-zinc-100 mb-1">Dashboard</h1>
+          <p className="text-zinc-500">Welcome back, {user?.email}</p>
         </div>
 
+        {/* Message */}
+        {message && (
+          <div className={`mb-6 px-4 py-3 rounded-lg text-sm ${
+            message.includes('limit') || message.includes('wrong')
+              ? 'bg-red-950/50 border border-red-900 text-red-400'
+              : 'bg-emerald-950/50 border border-emerald-900 text-emerald-400'
+          }`}>
+            {message}
+          </div>
+        )}
+
         {/* Grid */}
-        <div className="grid lg:grid-cols-[260px,1fr] gap-6">
-          {/* Usage Sidebar */}
-          {usage && (
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-5 h-fit">
-              <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Usage</h2>
-              <div className="mb-4">
-                <div className="text-2xl font-light text-zinc-100 mb-1">
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Usage Card */}
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+            <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Usage This Month</h2>
+            {usage ? (
+              <>
+                <div className="text-3xl font-light text-zinc-100 mb-2">
                   {usage.usageCount}
                   {usage.limit !== 'unlimited' && (
                     <span className="text-zinc-500 text-lg"> / {usage.limit}</span>
                   )}
                 </div>
-                <p className="text-zinc-500 text-sm">requests this month</p>
-              </div>
-              <div className="p-3 bg-zinc-800/50 rounded border border-zinc-800">
-                <p className="text-zinc-400 text-sm">
-                  {usage.limit === 'unlimited' ? 'Unlimited' : `${usage.remaining} remaining`}
-                </p>
-              </div>
-              <div className="mt-5 pt-5 border-t border-zinc-800">
-                <span className="inline-block px-2 py-1 bg-zinc-800 text-zinc-400 text-xs font-medium rounded">
-                  {plan.toUpperCase()}
-                </span>
-              </div>
-            </div>
-          )}
+                {usage.limit !== 'unlimited' && (
+                  <div className="w-full bg-zinc-800 rounded-full h-2 mb-4">
+                    <div
+                      className="h-2 rounded-full transition-all"
+                      style={{
+                        width: `${Math.min((usage.usageCount / Number(usage.limit)) * 100, 100)}%`,
+                        backgroundColor: primaryColor
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className="text-zinc-500 text-sm">Plan:</span>
+                  <span
+                    className="px-2 py-0.5 text-xs font-medium rounded text-white"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    {plan.toUpperCase()}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="text-zinc-500">Loading...</div>
+            )}
+          </div>
 
-          {/* Main Content */}
+          {/* Demo Action Card */}
           <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
-            {/* Info Box */}
-            <div className="bg-zinc-800/50 border border-zinc-700 rounded p-4 mb-6">
-              <p className="text-zinc-300 text-sm font-medium mb-1">Replace this with your product</p>
-              <p className="text-zinc-500 text-xs">The button below shows the pattern: call API, track usage, show result</p>
-            </div>
-
-            <h2 className="text-xl font-medium text-zinc-100 mb-2">Your Feature</h2>
-            <p className="text-zinc-500 text-sm mb-6">
-              Describe what your product does. Usage tracking is handled by the SDK.
+            <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Demo Action</h2>
+            <p className="text-zinc-400 text-sm mb-4">
+              Replace this with your product's main action. Each click tracks usage.
             </p>
-
             <button
-              onClick={makeRequest}
+              onClick={handleTrackUsage}
               disabled={loading || !isReady}
-              className={`px-6 py-2.5 text-sm font-medium rounded transition-colors ${
+              className={`w-full py-3 text-sm font-medium rounded transition-colors ${
                 loading || !isReady
                   ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-                  : 'bg-zinc-100 text-zinc-900 hover:bg-white'
+                  : 'text-white hover:opacity-90'
               }`}
+              style={!loading && isReady ? { backgroundColor: primaryColor } : undefined}
             >
-              {loading ? 'Processing...' : !isReady ? 'Loading...' : 'Try Demo (Track Usage)'}
+              {loading ? 'Processing...' : 'Track Usage'}
             </button>
-
-            {message && (
-              <div className="mt-4 px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded text-zinc-300 text-sm">
-                {message}
-              </div>
-            )}
-
-            {/* Output Area */}
-            <div className="mt-6 p-8 bg-zinc-800/30 border border-zinc-800 rounded text-center">
-              <p className="text-zinc-600 text-sm">Your product output goes here</p>
-            </div>
           </div>
         </div>
 
         {/* Upgrade CTA */}
         {plan === 'free' && (
-          <div className="mt-8 p-8 bg-zinc-900 border border-zinc-800 rounded-lg text-center">
-            <h3 className="text-xl font-medium text-zinc-100 mb-2">Upgrade to Pro</h3>
-            <p className="text-zinc-500 mb-6">Get unlimited access and more features</p>
+          <div className="mt-8 bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
+            <h3 className="text-lg font-medium text-zinc-100 mb-2">Upgrade to Pro</h3>
+            <p className="text-zinc-500 text-sm mb-4">
+              Remove limits and unlock all features
+            </p>
             <button
               onClick={handleChangePlan}
-              className="px-8 py-2.5 bg-zinc-100 text-zinc-900 rounded font-medium hover:bg-white transition-colors"
+              className="px-6 py-2.5 text-sm font-medium rounded text-white hover:opacity-90 transition-colors"
+              style={{ backgroundColor: primaryColor }}
             >
               View Plans
             </button>

@@ -5,15 +5,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
+import type { Tier } from '@dream-api/sdk';
 
-interface Tier {
-  name: string;
-  displayName?: string;
-  price: number;
-  limit: number;
-  priceId: string;
-  features?: string[];
-}
+// ============================================================================
+// BRANDING
+// ============================================================================
+const BRANDING = {
+  appName: 'YourApp',
+  primaryColor: '#18181b',
+};
 
 export default function ChoosePlanPage() {
   const { api, isReady, user } = useDreamAPI();
@@ -25,6 +25,7 @@ export default function ChoosePlanPage() {
   const [upgrading, setUpgrading] = useState<string | null>(null);
 
   const currentPlan = user?.plan || 'free';
+  const { appName, primaryColor } = BRANDING;
 
   useEffect(() => {
     async function loadTiers() {
@@ -85,13 +86,16 @@ export default function ChoosePlanPage() {
   return (
     <div className="min-h-screen bg-zinc-950">
       {/* Header */}
-      <div className="border-b border-zinc-900 px-6 py-4">
-        <div className="max-w-6xl mx-auto">
+      <nav className="border-b border-zinc-900 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <Link to="/" className="text-xl font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+            {appName}
+          </Link>
           <Link to="/dashboard" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
             &larr; Back to Dashboard
           </Link>
         </div>
-      </div>
+      </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         {/* Title */}
@@ -124,22 +128,28 @@ export default function ChoosePlanPage() {
                 key={tier.name}
                 className={`relative bg-zinc-900/50 rounded-lg p-6 transition-colors ${
                   isCurrentPlan
-                    ? 'border-2 border-zinc-600'
+                    ? 'border-2 border-emerald-500/50'
                     : isPopular
-                    ? 'border-2 border-zinc-700'
+                    ? 'border-2 border-emerald-500/30'
                     : 'border border-zinc-800 hover:border-zinc-700'
                 }`}
               >
                 {/* Popular badge */}
                 {isPopular && !isCurrentPlan && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-zinc-700 text-zinc-200 text-xs font-medium rounded">
+                  <div
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-medium rounded text-white"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     POPULAR
                   </div>
                 )}
 
                 {/* Current plan badge */}
                 {isCurrentPlan && (
-                  <div className="mb-4 inline-block px-2 py-1 bg-zinc-700 text-zinc-300 text-xs font-medium rounded">
+                  <div
+                    className="mb-4 inline-block px-2 py-1 text-xs font-medium rounded text-white"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     CURRENT
                   </div>
                 )}
@@ -167,8 +177,13 @@ export default function ChoosePlanPage() {
                       ? 'bg-zinc-800 text-zinc-500 cursor-wait'
                       : tier.price === 0
                       ? 'border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600'
-                      : 'bg-zinc-100 text-zinc-900 hover:bg-white'
+                      : 'text-white hover:opacity-90'
                   }`}
+                  style={
+                    !isCurrentPlan && !isUpgrading && tier.price > 0
+                      ? { backgroundColor: primaryColor }
+                      : undefined
+                  }
                 >
                   {isCurrentPlan
                     ? 'Current Plan'

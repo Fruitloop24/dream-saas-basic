@@ -1,90 +1,139 @@
-# SaaS Setup
+# SaaS Template Setup
 
-Configure this SaaS template through a guided conversation.
+Hey! I'm here to help you set up your SaaS app. We'll configure your branding, content, and get you ready to launch.
 
-## Instructions
+## How This Works
 
-Ask these questions ONE AT A TIME and wait for each answer:
+I'll ask you questions one at a time. Answer each one, and I'll update the code for you. At the end, you'll have a fully branded SaaS ready to deploy.
+
+---
+
+## Questions (Ask ONE at a time, wait for answer)
 
 ### 1. App Name
-"What's your app name?"
+"What's the name of your app?"
 
-### 2. Tagline
-"What's your main headline? (What problem do you solve?)"
+### 2. Headline
+"What's your main headline? This is the big text visitors see first. Focus on the benefit you provide."
 
-### 3. Description
-"Describe what your app does in one sentence."
+Example: "Automate your workflow in minutes"
 
-### 4. Style
-"What style fits your brand?"
-- **Minimal** - Clean, professional, understated
-- **Bold** - Strong colors, high contrast
-- **Tech** - Developer-focused, modern
-- **Friendly** - Approachable, warm tones
+### 3. Subheadline
+"Now a supporting line - describe what your app does in one sentence."
 
-### 5. Colors
-Based on style, suggest:
+Example: "The simple tool that helps teams save 10 hours a week on repetitive tasks."
 
-**Minimal:**
-- Primary: `#18181b`, Accent: `#3f3f46` (zinc)
+### 4. How It Works
+"Describe your process in 3 simple steps. What does a user do?"
 
-**Bold:**
-- Primary: `#dc2626`, Accent: `#ea580c` (red/orange)
-- Primary: `#7c3aed`, Accent: `#a855f7` (violet)
+Example:
+1. Sign up and connect your tools
+2. Set up your automation rules
+3. Watch it work while you focus on what matters
 
-**Tech:**
-- Primary: `#0ea5e9`, Accent: `#06b6d4` (sky/cyan)
-- Primary: `#10b981`, Accent: `#22c55e` (emerald)
+### 5. Features
+"What are 3-6 key features of your product? Give me a title and one-line description for each."
 
-**Friendly:**
-- Primary: `#f59e0b`, Accent: `#fbbf24` (amber)
-- Primary: `#ec4899`, Accent: `#f472b6` (pink)
+Example:
+- **Smart Automation** - Set rules once, let the system handle the rest
+- **Team Dashboard** - See what everyone's working on in real-time
+- **Integrations** - Connect with the tools you already use
 
-Ask: "I suggest [colors]. Want these or provide your own?"
+### 6. FAQ
+"What questions do your customers commonly ask? Give me 3-4 questions and answers."
 
-### 6. Pricing Tiers
-"What pricing tiers do you want? For example:"
-- Free: 100 requests/month, $0
-- Pro: Unlimited, $9/month
-- Enterprise: Unlimited + priority, $29/month
+(I'll keep some defaults if you're not sure yet)
 
-(Note: Tiers are created in the dream-api dashboard, not in code. Just gather the info for reference.)
+### 7. Style
+"What visual style fits your brand?"
 
-### 7. Logo
-"Do you have a logo? (If yes, place in src/assets/ and I'll wire it up)"
+- **Minimal** - Clean, professional, understated (zinc/gray tones)
+- **Bold** - Strong colors, high contrast (reds, oranges, violets)
+- **Tech** - Developer-focused, modern (blues, cyans, greens)
+- **Friendly** - Approachable, warm (ambers, pinks)
+
+Based on their choice, suggest colors:
+- Minimal: Keep defaults (zinc)
+- Bold: `#dc2626` red or `#7c3aed` violet
+- Tech: `#0ea5e9` sky or `#10b981` emerald
+- Friendly: `#f59e0b` amber or `#ec4899` pink
+
+Ask: "I suggest [color]. Want this, or give me a hex code?"
+
+### 8. Logo (Optional)
+"Do you have a logo file? If yes, place it in `public/` and tell me the filename. If not, we'll use text."
+
+### 9. Footer Links (Optional)
+"Any footer links? (Privacy policy, terms, contact page, etc.)"
 
 ---
 
 ## After Gathering Info
 
-Update these files:
+Update the `CONTENT` object in `src/pages/Landing.tsx`:
 
-### src/pages/Landing.tsx
 ```typescript
-const BRANDING = {
-  appName: '[name]',
-  tagline: '[tagline]',
-  description: '[description]',
-  primaryColor: '[primary]',
-  accentColor: '[accent]',
+const CONTENT = {
+  appName: '[their app name]',
+
+  hero: {
+    headline: '[their headline]',
+    subheadline: '[their subheadline]',
+    cta: 'Start Free',
+    ctaSubtext: 'No credit card required',
+  },
+
+  howItWorks: {
+    headline: 'How It Works',
+    subheadline: 'Get started in minutes',
+    steps: [
+      { number: '1', title: '[step 1 title]', description: '[step 1 desc]' },
+      { number: '2', title: '[step 2 title]', description: '[step 2 desc]' },
+      { number: '3', title: '[step 3 title]', description: '[step 3 desc]' },
+    ],
+  },
+
+  features: {
+    headline: 'Everything You Need',
+    subheadline: '[customize or keep]',
+    items: [
+      { title: '[feature 1]', description: '[desc]' },
+      { title: '[feature 2]', description: '[desc]' },
+      // ... more features
+    ],
+  },
+
+  faq: {
+    headline: 'Questions & Answers',
+    items: [
+      { question: '[q1]', answer: '[a1]' },
+      { question: '[q2]', answer: '[a2]' },
+      // ... more FAQ
+    ],
+  },
+
+  finalCta: {
+    headline: 'Ready to get started?',
+    subheadline: '[customize based on their product]',
+    cta: 'Start Free Today',
+  },
+
+  footer: {
+    links: [
+      // Add their links: { label: 'Privacy', href: '/privacy' }
+    ] as Array<{ label: string; href: string }>,
+  },
 };
 ```
 
-### src/pages/Dashboard.tsx
-```typescript
-const BRANDING = {
-  appName: '[name]',
-  description: '[description]',
-  primaryColor: '[primary]',
-};
-```
+Also update `src/pages/Dashboard.tsx` and `src/pages/ChoosePlanPage.tsx`:
+- Change `appName` in the BRANDING object to match
 
-### If they have a logo
-Update Landing.tsx nav:
+If they have a logo, update the nav in Landing.tsx:
 ```tsx
 <Link to="/" className="flex items-center gap-2">
-  <img src="/assets/logo.png" alt="Logo" className="h-8" />
-  <span>{appName}</span>
+  <img src="/[their-logo.png]" alt="Logo" className="h-8" />
+  <span className="text-xl font-medium">{CONTENT.appName}</span>
 </Link>
 ```
 
@@ -92,40 +141,93 @@ Update Landing.tsx nav:
 
 ## Final Steps
 
-Tell them:
+After making changes, tell them:
 
-1. "Your app is configured!"
-   - App: [name]
-   - Style: [style]
-   - Colors: [primary] / [accent]
+### Summary
+"Your app is configured!"
+- App: [name]
+- Style: [style]
+- Primary Color: [color]
 
-2. "To run locally:"
-   ```bash
-   npm install
-   npm run dev
-   ```
+### Run Locally
+```bash
+npm install
+npm run dev
+```
 
-3. "Set your publishable key in .env.local:"
-   ```
-   VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
-   ```
+### Set Your API Key
+"Create `.env.local` and add your publishable key from dream-api dashboard:"
+```
+VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
+```
 
-4. "Create your tiers in the dream-api dashboard. They'll appear on your pricing page automatically."
+### Create Your Tiers
+"Log into your dream-api dashboard and create your pricing tiers. They'll automatically appear on your pricing page."
 
-5. "The Dashboard has a demo 'Track Usage' button. Replace it with your actual product."
-
-6. "To deploy: `npm run build` and upload `dist/` to any static host."
+### Customize the Dashboard
+"The Dashboard page (`src/pages/Dashboard.tsx`) has a demo 'Track Usage' button. Replace that section with your actual product feature."
 
 ---
 
-## Common Follow-ups
+## Deployment
 
-If they ask about:
+Ask: "Ready to deploy? I can help you set up:"
 
-**Adding pages:** Create in `src/pages/`, add route in `App.tsx`
+### Option 1: Cloudflare Pages (Recommended)
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name=[app-name]
+```
+- Free SSL, global CDN, automatic deploys from GitHub
 
-**Custom features:** The Dashboard has a placeholder area - replace with their product UI
+### Option 2: GitHub Pages
+```bash
+npm run build
+# Push dist/ to gh-pages branch
+```
 
-**Usage tracking:** Already wired - just call `api.usage.track()` when they use a feature
+### Option 3: Vercel / Netlify
+```bash
+npm run build
+# Connect your repo, set VITE_DREAM_PUBLISHABLE_KEY in environment
+```
 
-**Billing portal:** Already wired - "Billing" button appears for paid users
+---
+
+## What NOT To Do
+
+When customizing this template:
+
+1. **Don't modify `src/hooks/useDreamAPI.tsx`** - This handles auth correctly
+2. **Don't build custom sign-up forms** - Use `dreamAPI.auth.getSignUpUrl()`
+3. **Don't build custom sign-in forms** - Use `dreamAPI.auth.getSignInUrl()`
+4. **Don't add "delete account" buttons** - Users manage accounts via `dreamAPI.auth.getCustomerPortalUrl()`
+5. **Don't put SK in frontend code** - Only PK goes in the browser
+
+---
+
+## Common Customizations
+
+If they ask for:
+
+**Adding a new page:**
+1. Create `src/pages/NewPage.tsx`
+2. Add route in `src/App.tsx`
+3. Wrap in `<ProtectedRoute>` if it needs auth
+
+**Adding product features:**
+Replace the demo card in Dashboard.tsx with their actual UI. Call `api.usage.track()` when users do billable actions.
+
+**Custom pricing display:**
+The pricing section pulls from the API automatically. Customize the display in Landing.tsx but don't hardcode prices.
+
+**Adding social proof logos:**
+Update the `socialProof.logos` array in CONTENT with image paths.
+
+---
+
+## Need More Help?
+
+- **SDK Reference:** See `docs/SDK-GUIDE.md` in the main dream-api repo
+- **API Endpoints:** See `docs/API-REFERENCE.md`
+- **Issues:** https://github.com/dream-api/sdk/issues
