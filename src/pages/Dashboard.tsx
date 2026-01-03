@@ -7,7 +7,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDreamAPI } from '../hooks/useDreamAPI';
-import { CONFIG, getAccentClasses, getAccentHex } from '../config';
+import { getAccentClasses, getThemeClasses } from '../config';
 import Nav from '../components/Nav';
 
 interface UsageData {
@@ -27,7 +27,7 @@ export default function Dashboard() {
   const [searchParams] = useSearchParams();
 
   const accent = getAccentClasses();
-  const accentHex = getAccentHex();
+  const theme = getThemeClasses();
   const plan = user?.plan || 'free';
 
   const fetchUsage = useCallback(async () => {
@@ -88,15 +88,15 @@ export default function Dashboard() {
   }, [isReady, searchParams, fetchUsage, refreshUser]);
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className={`min-h-screen ${theme.pageBg}`}>
       {/* Shared Nav with profile dropdown */}
       <Nav />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-light text-zinc-100 mb-1">Dashboard</h1>
-          <p className="text-zinc-500">Welcome back, {user?.email}</p>
+          <h1 className={`text-2xl font-light ${theme.heading} mb-1`}>Dashboard</h1>
+          <p className={theme.body}>Welcome back, {user?.email}</p>
         </div>
 
         {/* Message */}
@@ -113,18 +113,18 @@ export default function Dashboard() {
         {/* Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Usage Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
-            <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Usage This Month</h2>
+          <div className={`${theme.cardBg} rounded-xl p-6`}>
+            <h2 className={`text-xs ${theme.muted} font-medium uppercase tracking-wider mb-4`}>Usage This Month</h2>
             {usage ? (
               <>
-                <div className="text-3xl font-light text-zinc-100 mb-2">
+                <div className={`text-3xl font-light ${theme.heading} mb-2`}>
                   {usage.usageCount}
                   {usage.limit !== 'unlimited' && (
-                    <span className="text-zinc-500 text-lg"> / {usage.limit}</span>
+                    <span className={`${theme.body} text-lg`}> / {usage.limit}</span>
                   )}
                 </div>
                 {usage.limit !== 'unlimited' && (
-                  <div className="w-full bg-zinc-800 rounded-full h-2 mb-4">
+                  <div className={`w-full ${theme.progressBg} rounded-full h-2 mb-4`}>
                     <div
                       className={`h-2 rounded-full transition-all ${accent.bg}`}
                       style={{
@@ -134,21 +134,21 @@ export default function Dashboard() {
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-zinc-500 text-sm">Plan:</span>
+                  <span className={`${theme.body} text-sm`}>Plan:</span>
                   <span className={`px-2 py-0.5 text-xs font-medium rounded ${accent.bg} text-white`}>
                     {plan.toUpperCase()}
                   </span>
                 </div>
               </>
             ) : (
-              <div className="text-zinc-500">Loading...</div>
+              <div className={theme.body}>Loading...</div>
             )}
           </div>
 
           {/* Demo Action Card - REPLACE THIS WITH YOUR PRODUCT */}
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
-            <h2 className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-4">Demo Action</h2>
-            <p className="text-zinc-400 text-sm mb-4">
+          <div className={`${theme.cardBg} rounded-xl p-6`}>
+            <h2 className={`text-xs ${theme.muted} font-medium uppercase tracking-wider mb-4`}>Demo Action</h2>
+            <p className={`${theme.body} text-sm mb-4`}>
               Replace this with your product's main action. Each click tracks usage.
             </p>
             <button
@@ -156,7 +156,7 @@ export default function Dashboard() {
               disabled={loading || !isReady}
               className={`w-full py-3 text-sm font-medium rounded-lg transition-colors ${
                 loading || !isReady
-                  ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
+                  ? `${theme.buttonDisabled} cursor-not-allowed`
                   : `${accent.bg} text-white ${accent.bgHover}`
               }`}
             >
@@ -167,9 +167,9 @@ export default function Dashboard() {
 
         {/* Upgrade CTA */}
         {plan === 'free' && (
-          <div className="mt-8 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
-            <h3 className="text-lg font-medium text-zinc-100 mb-2">Upgrade Your Plan</h3>
-            <p className="text-zinc-500 text-sm mb-4">
+          <div className={`mt-8 ${theme.cardBg} rounded-xl p-6 text-center`}>
+            <h3 className={`text-lg font-medium ${theme.heading} mb-2`}>Upgrade Your Plan</h3>
+            <p className={`${theme.body} text-sm mb-4`}>
               Remove limits and unlock all features
             </p>
             <button

@@ -158,9 +158,22 @@ Change tiers/prices in dashboard → Your app updates automatically.
 2. **Track usage** - Call `api.usage.track()` when users do billable actions
 3. **Deploy** - Run `npm run build` and deploy the `dist/` folder anywhere
 
-**Want to make it installable as a phone app?** Run `/pwa` and I'll add Progressive Web App support - your users can install it from their browser.
-
 **Need help?** Check CLAUDE.md for SDK methods and examples."
+
+---
+
+## Make It Installable (PWA)
+
+When they're ready, tell them:
+
+"**Want users to install your app on their phone?** Run `/pwa` and I'll add Progressive Web App support:
+
+- **Install from browser** - Users tap 'Add to Home Screen' and get an app icon
+- **Works offline** - Cached assets load instantly
+- **No app store needed** - Skip the 30% Apple/Google tax
+- **QR code ready** - I'll help you add a QR code so users can scan and install
+
+Just run `/pwa` when you're ready!"
 
 ---
 

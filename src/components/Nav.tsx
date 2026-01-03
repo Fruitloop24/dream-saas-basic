@@ -12,7 +12,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
-import { CONFIG, getAccentClasses } from '../config';
+import { CONFIG, getAccentClasses, getThemeClasses } from '../config';
 
 interface NavProps {
   showAuthLinks?: boolean; // Show Features/Pricing/FAQ links
@@ -25,6 +25,7 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const accent = getAccentClasses();
+  const theme = getThemeClasses();
 
   const plan = user?.plan || 'free';
 
@@ -71,7 +72,7 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
   };
 
   return (
-    <nav className={`border-b border-zinc-900 ${transparent ? 'bg-transparent' : 'bg-zinc-950'}`}>
+    <nav className={transparent ? 'bg-transparent' : theme.navBg}>
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
@@ -88,13 +89,13 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
           {/* Page links (landing only) */}
           {showAuthLinks && (
             <>
-              <a href="#features" className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors hidden sm:block">
+              <a href="#features" className={`text-sm ${theme.link} transition-colors hidden sm:block`}>
                 Features
               </a>
-              <a href="#pricing" className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors hidden sm:block">
+              <a href="#pricing" className={`text-sm ${theme.link} transition-colors hidden sm:block`}>
                 Pricing
               </a>
-              <a href="#faq" className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors hidden sm:block">
+              <a href="#faq" className={`text-sm ${theme.link} transition-colors hidden sm:block`}>
                 FAQ
               </a>
             </>
@@ -108,7 +109,7 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-900 transition-colors"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg ${theme.buttonHover} transition-colors`}
               >
                 {/* Avatar */}
                 <div className={`w-8 h-8 rounded-full ${accent.bg} flex items-center justify-center text-white text-sm font-medium`}>
@@ -127,11 +128,11 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
 
               {/* Dropdown menu */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl z-50">
+                <div className={`absolute right-0 mt-2 w-56 ${theme.dropdownBg} rounded-lg shadow-xl z-50`}>
                   {/* User info */}
-                  <div className="px-4 py-3 border-b border-zinc-800">
-                    <p className="text-sm text-zinc-100 truncate">{user?.email}</p>
-                    <p className="text-xs text-zinc-500 mt-0.5">
+                  <div className={`px-4 py-3 border-b ${theme.dropdownDivider}`}>
+                    <p className={`text-sm ${theme.heading} truncate`}>{user?.email}</p>
+                    <p className={`text-xs ${theme.muted} mt-0.5`}>
                       Plan: <span className={accent.text}>{plan.toUpperCase()}</span>
                     </p>
                   </div>
@@ -141,27 +142,27 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
                     <Link
                       to="/dashboard"
                       onClick={() => setDropdownOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+                      className={`block px-4 py-2 text-sm ${theme.dropdownItem} transition-colors`}
                     >
                       Dashboard
                     </Link>
                     <Link
                       to="/choose-plan"
                       onClick={() => setDropdownOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+                      className={`block px-4 py-2 text-sm ${theme.dropdownItem} transition-colors`}
                     >
                       {plan === 'free' ? 'Upgrade Plan' : 'Change Plan'}
                     </Link>
                     <button
                       onClick={handleAccountSettings}
-                      className="w-full text-left px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+                      className={`w-full text-left px-4 py-2 text-sm ${theme.dropdownItem} transition-colors`}
                     >
                       Account Settings
                     </button>
                     {plan !== 'free' && (
                       <button
                         onClick={handleBilling}
-                        className="w-full text-left px-4 py-2 text-sm text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+                        className={`w-full text-left px-4 py-2 text-sm ${theme.dropdownItem} transition-colors`}
                       >
                         Billing
                       </button>
@@ -169,10 +170,10 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
                   </div>
 
                   {/* Sign out */}
-                  <div className="border-t border-zinc-800 py-1">
+                  <div className={`border-t ${theme.dropdownDivider} py-1`}>
                     <button
                       onClick={handleSignOut}
-                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-zinc-800 transition-colors"
+                      className={`w-full text-left px-4 py-2 text-sm ${theme.dangerItem} transition-colors`}
                     >
                       Sign Out
                     </button>
@@ -185,7 +186,7 @@ export default function Nav({ showAuthLinks = false, transparent = false }: NavP
             <>
               <a
                 href={getSignInUrl()}
-                className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
+                className={`text-sm ${theme.link} transition-colors`}
               >
                 Sign In
               </a>

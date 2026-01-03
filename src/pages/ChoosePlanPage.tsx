@@ -7,7 +7,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
-import { CONFIG, getAccentClasses } from '../config';
+import { getAccentClasses, getThemeClasses } from '../config';
 import Nav from '../components/Nav';
 import type { Tier } from '@dream-api/sdk';
 
@@ -22,6 +22,7 @@ export default function ChoosePlanPage() {
 
   const currentPlan = user?.plan || 'free';
   const accent = getAccentClasses();
+  const theme = getThemeClasses();
 
   useEffect(() => {
     async function loadTiers() {
@@ -73,24 +74,24 @@ export default function ChoosePlanPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin"></div>
+      <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center`}>
+        <div className={`w-6 h-6 border-2 ${theme.progressBg} border-t-current rounded-full animate-spin ${theme.body}`}></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className={`min-h-screen ${theme.pageBg}`}>
       {/* Shared Nav with profile dropdown */}
       <Nav />
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         {/* Title */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-light text-zinc-100 mb-3">Choose Your Plan</h1>
-          <p className="text-zinc-500">Upgrade or change your subscription</p>
+          <h1 className={`text-3xl font-light ${theme.heading} mb-3`}>Choose Your Plan</h1>
+          <p className={theme.body}>Upgrade or change your subscription</p>
           {currentPlan && (
-            <p className="mt-2 text-sm text-zinc-600">
+            <p className={`mt-2 text-sm ${theme.muted}`}>
               Current plan: <span className={accent.text}>{currentPlan.toUpperCase()}</span>
             </p>
           )}
@@ -113,12 +114,12 @@ export default function ChoosePlanPage() {
             return (
               <div
                 key={tier.name}
-                className={`relative bg-zinc-900/50 rounded-xl p-6 transition-colors ${
+                className={`relative ${theme.cardBg} rounded-xl p-6 transition-colors ${
                   isCurrentPlan
                     ? `border-2 ${accent.border}`
                     : isPopular
                     ? `border-2 ${accent.border} opacity-80`
-                    : 'border border-zinc-800 hover:border-zinc-700'
+                    : theme.cardHover
                 }`}
               >
                 {/* Popular badge */}
@@ -135,16 +136,16 @@ export default function ChoosePlanPage() {
                   </div>
                 )}
 
-                <h3 className="text-lg font-medium text-zinc-100 mb-2">
+                <h3 className={`text-lg font-medium ${theme.heading} mb-2`}>
                   {tier.displayName || tier.name}
                 </h3>
 
                 <div className="mb-4">
-                  <span className="text-3xl font-light text-zinc-200">${tier.price}</span>
-                  <span className="text-zinc-500 text-sm">/month</span>
+                  <span className={`text-3xl font-light ${theme.heading}`}>${tier.price}</span>
+                  <span className={`${theme.body} text-sm`}>/month</span>
                 </div>
 
-                <p className="text-zinc-500 text-sm mb-6">
+                <p className={`${theme.body} text-sm mb-6`}>
                   {tier.limit === -1 ? 'Unlimited requests' : `${tier.limit.toLocaleString()} requests/month`}
                 </p>
 
@@ -153,11 +154,11 @@ export default function ChoosePlanPage() {
                   disabled={isCurrentPlan || isUpgrading}
                   className={`w-full py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isCurrentPlan
-                      ? 'bg-zinc-800 text-zinc-500 cursor-default'
+                      ? `${theme.buttonDisabled} cursor-default`
                       : isUpgrading
-                      ? 'bg-zinc-800 text-zinc-500 cursor-wait'
+                      ? `${theme.buttonDisabled} cursor-wait`
                       : tier.price === 0
-                      ? 'border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600'
+                      ? theme.buttonSecondary
                       : `${accent.bg} text-white ${accent.bgHover}`
                   }`}
                 >
@@ -173,7 +174,7 @@ export default function ChoosePlanPage() {
                 {tier.features && tier.features.length > 0 && (
                   <ul className="mt-6 space-y-2">
                     {tier.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-zinc-500 text-sm">
+                      <li key={i} className={`flex items-start gap-2 ${theme.body} text-sm`}>
                         <svg className={`w-4 h-4 mt-0.5 ${accent.text} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
@@ -189,7 +190,7 @@ export default function ChoosePlanPage() {
 
         {/* Footer */}
         <div className="mt-10 text-center">
-          <p className="text-zinc-600 text-sm">
+          <p className={`${theme.muted} text-sm`}>
             All plans include core features &middot; Cancel anytime
           </p>
         </div>

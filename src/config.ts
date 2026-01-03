@@ -17,7 +17,10 @@ export const CONFIG = {
   // Logo: place file in public/ folder, or set to null for text-only
   logo: null as string | null, // e.g., '/logo.png'
 
-  // Primary accent color (Tailwind class or hex)
+  // Theme: 'light' (professional, clean) or 'dark' (modern, bold)
+  theme: 'light' as 'light' | 'dark',
+
+  // Primary accent color
   // Options: 'emerald', 'sky', 'violet', 'rose', 'amber', 'zinc'
   accentColor: 'emerald',
 
@@ -232,4 +235,65 @@ export function getAccentClasses() {
 
 export function getAccentHex() {
   return getAccentClasses().hex;
+}
+
+// ============================================================================
+// THEME UTILITIES
+// ============================================================================
+
+const THEMES = {
+  light: {
+    // Main backgrounds
+    pageBg: 'bg-slate-50',
+    navBg: 'bg-white border-b border-slate-200',
+    cardBg: 'bg-white border border-slate-200',
+    sectionAltBg: 'bg-white',
+    footerBg: 'bg-slate-100 border-t border-slate-200',
+    // Text colors
+    heading: 'text-slate-900',
+    body: 'text-slate-600',
+    muted: 'text-slate-400',
+    // Interactive
+    cardHover: 'hover:border-slate-300 hover:shadow-md',
+    link: 'text-slate-600 hover:text-slate-900',
+    // Dropdown (Nav)
+    dropdownBg: 'bg-white border border-slate-200',
+    dropdownDivider: 'border-slate-200',
+    dropdownItem: 'text-slate-600 hover:text-slate-900 hover:bg-slate-100',
+    buttonHover: 'hover:bg-slate-100',
+    dangerItem: 'text-red-600 hover:text-red-700 hover:bg-red-50',
+    progressBg: 'bg-slate-200',
+    // Buttons
+    buttonDisabled: 'bg-slate-200 text-slate-400',
+    buttonSecondary: 'border border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400',
+  },
+  dark: {
+    // Main backgrounds
+    pageBg: 'bg-zinc-950',
+    navBg: 'bg-zinc-950 border-b border-zinc-900',
+    cardBg: 'bg-zinc-900/50 border border-zinc-800',
+    sectionAltBg: 'bg-zinc-900/30',
+    footerBg: 'bg-zinc-950 border-t border-zinc-900',
+    // Text colors
+    heading: 'text-zinc-100',
+    body: 'text-zinc-400',
+    muted: 'text-zinc-600',
+    // Interactive
+    cardHover: 'hover:border-zinc-700',
+    link: 'text-zinc-500 hover:text-zinc-300',
+    // Dropdown (Nav)
+    dropdownBg: 'bg-zinc-900 border border-zinc-800',
+    dropdownDivider: 'border-zinc-800',
+    dropdownItem: 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800',
+    buttonHover: 'hover:bg-zinc-900',
+    dangerItem: 'text-red-400 hover:text-red-300 hover:bg-zinc-800',
+    progressBg: 'bg-zinc-800',
+    // Buttons
+    buttonDisabled: 'bg-zinc-800 text-zinc-500',
+    buttonSecondary: 'border border-zinc-700 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600',
+  },
+};
+
+export function getThemeClasses() {
+  return THEMES[CONFIG.theme] || THEMES.light;
 }

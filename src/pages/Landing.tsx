@@ -7,7 +7,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
-import { CONFIG, getAccentClasses } from '../config';
+import { CONFIG, getAccentClasses, getThemeClasses } from '../config';
 import Nav from '../components/Nav';
 import Icon from '../components/Icons';
 import type { Tier } from '@dream-api/sdk';
@@ -19,6 +19,7 @@ export default function Landing() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const accent = getAccentClasses();
+  const theme = getThemeClasses();
 
   useEffect(() => {
     dreamAPI.products.listTiers()
@@ -32,7 +33,7 @@ export default function Landing() {
   });
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className={`min-h-screen ${theme.pageBg} ${theme.heading}`}>
       {/* Navigation */}
       <Nav showAuthLinks />
 
@@ -42,10 +43,10 @@ export default function Landing() {
           <div className={`grid ${CONFIG.hero.image ? 'lg:grid-cols-2 gap-12 items-center' : ''}`}>
             {/* Hero Content */}
             <div className={CONFIG.hero.image ? '' : 'text-center max-w-4xl mx-auto'}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6">
+              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6 ${theme.heading}`}>
                 {CONFIG.hero.headline}
               </h1>
-              <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-2xl">
+              <p className={`text-lg md:text-xl ${theme.body} mb-10 max-w-2xl`}>
                 {CONFIG.hero.subheadline}
               </p>
               <div className={`flex flex-col sm:flex-row gap-4 ${CONFIG.hero.image ? '' : 'justify-center'}`}>
@@ -66,7 +67,7 @@ export default function Landing() {
                 )}
               </div>
               {CONFIG.hero.ctaSubtext && (
-                <p className="mt-4 text-zinc-600 text-sm">
+                <p className={`mt-4 ${theme.muted} text-sm`}>
                   {CONFIG.hero.ctaSubtext}
                 </p>
               )}
@@ -110,18 +111,18 @@ export default function Landing() {
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-light mb-3">{CONFIG.howItWorks.headline}</h2>
-            <p className="text-zinc-500">{CONFIG.howItWorks.subheadline}</p>
+            <h2 className={`text-3xl font-light mb-3 ${theme.heading}`}>{CONFIG.howItWorks.headline}</h2>
+            <p className={theme.body}>{CONFIG.howItWorks.subheadline}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {CONFIG.howItWorks.steps.map((step, i) => (
               <div key={i} className="text-center">
-                <div className={`w-14 h-14 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-4 ${accent.text}`}>
+                <div className={`w-14 h-14 rounded-xl ${theme.cardBg} flex items-center justify-center mx-auto mb-4 ${accent.text}`}>
                   <Icon name={step.icon || 'check'} className="w-6 h-6" />
                 </div>
-                <div className="text-xs text-zinc-600 font-medium mb-2">STEP {step.number}</div>
-                <h3 className="text-lg font-medium mb-2">{step.title}</h3>
-                <p className="text-zinc-500 text-sm">{step.description}</p>
+                <div className={`text-xs ${theme.muted} font-medium mb-2`}>STEP {step.number}</div>
+                <h3 className={`text-lg font-medium mb-2 ${theme.heading}`}>{step.title}</h3>
+                <p className={`${theme.body} text-sm`}>{step.description}</p>
               </div>
             ))}
           </div>
@@ -129,20 +130,20 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section id="features" className="py-24 px-6 bg-zinc-900/30">
+      <section id="features" className={`py-24 px-6 ${theme.sectionAltBg}`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-light mb-3">{CONFIG.features.headline}</h2>
-            <p className="text-zinc-500">{CONFIG.features.subheadline}</p>
+            <h2 className={`text-3xl font-light mb-3 ${theme.heading}`}>{CONFIG.features.headline}</h2>
+            <p className={theme.body}>{CONFIG.features.subheadline}</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CONFIG.features.items.map((feature, i) => (
-              <div key={i} className="p-6 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-colors">
-                <div className={`w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center mb-4 ${accent.text}`}>
-                  <Icon name={feature.icon || 'check'} className="w-5 h-5" />
+              <div key={i} className={`p-6 rounded-xl ${theme.cardBg} ${theme.cardHover} transition-all`}>
+                <div className={`w-10 h-10 rounded-lg ${accent.bg} flex items-center justify-center mb-4`}>
+                  <Icon name={feature.icon || 'check'} className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-lg font-medium mb-2">{feature.title}</h3>
-                <p className="text-zinc-500 text-sm">{feature.description}</p>
+                <h3 className={`text-lg font-medium mb-2 ${theme.heading}`}>{feature.title}</h3>
+                <p className={`${theme.body} text-sm`}>{feature.description}</p>
               </div>
             ))}
           </div>
@@ -294,15 +295,15 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 py-8 px-6">
+      <footer className={`py-8 px-6 ${theme.footerBg}`}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-zinc-600 text-sm">
+          <p className={`${theme.muted} text-sm`}>
             &copy; {new Date().getFullYear()} {CONFIG.appName}
           </p>
           {CONFIG.footer.links.length > 0 && (
             <div className="flex gap-6">
               {CONFIG.footer.links.map((link, i) => (
-                <Link key={i} to={link.href} className={`text-zinc-600 ${accent.textHover} text-sm transition-colors`}>
+                <Link key={i} to={link.href} className={`${theme.link} text-sm transition-colors`}>
                   {link.label}
                 </Link>
               ))}
