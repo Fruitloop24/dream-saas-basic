@@ -94,9 +94,34 @@ export default function Dashboard() {
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className={`text-2xl font-light ${theme.heading} mb-1`}>Dashboard</h1>
-          <p className={theme.body}>Welcome back, {user?.email}</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className={`text-2xl font-light ${theme.heading} mb-1`}>Dashboard</h1>
+            <p className={theme.body}>Welcome back, {user?.email}</p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/choose-plan')}
+              className={`px-4 py-2 text-sm font-medium rounded-lg ${theme.buttonSecondary} transition-colors`}
+            >
+              {plan === 'free' ? 'Upgrade' : 'Change Plan'}
+            </button>
+            {plan !== 'free' && (
+              <button
+                onClick={async () => {
+                  try {
+                    const result = await api.billing.openPortal({ returnUrl: window.location.href });
+                    if (result.url) window.location.href = result.url;
+                  } catch (e) {
+                    console.error('Billing portal error:', e);
+                  }
+                }}
+                className={`px-4 py-2 text-sm font-medium rounded-lg ${theme.buttonSecondary} transition-colors`}
+              >
+                Billing
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Message */}

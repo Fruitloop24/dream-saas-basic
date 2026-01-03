@@ -76,11 +76,10 @@ export default function Landing() {
             {/* Hero Image */}
             {CONFIG.hero.image && (
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950 via-transparent to-transparent z-10" />
                 <img
                   src={CONFIG.hero.image}
                   alt="Product"
-                  className="rounded-xl shadow-2xl border border-zinc-800"
+                  className={`rounded-xl shadow-2xl ${theme.cardBg}`}
                 />
               </div>
             )}
@@ -90,9 +89,9 @@ export default function Landing() {
 
       {/* Social Proof */}
       {CONFIG.socialProof.enabled && CONFIG.socialProof.logos.length > 0 && (
-        <section className="py-12 px-6 border-y border-zinc-900">
+        <section className={`py-12 px-6 border-y ${theme.dropdownDivider}`}>
           <div className="max-w-6xl mx-auto text-center">
-            <p className="text-zinc-500 text-sm mb-8">{CONFIG.socialProof.headline}</p>
+            <p className={`${theme.muted} text-sm mb-8`}>{CONFIG.socialProof.headline}</p>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
               {CONFIG.socialProof.logos.map((logo, i) => (
                 <img
@@ -154,13 +153,13 @@ export default function Landing() {
       <section id="pricing" className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-light mb-3">{CONFIG.pricing.headline}</h2>
-            <p className="text-zinc-500">{CONFIG.pricing.subheadline}</p>
+            <h2 className={`text-3xl font-light mb-3 ${theme.heading}`}>{CONFIG.pricing.headline}</h2>
+            <p className={theme.body}>{CONFIG.pricing.subheadline}</p>
           </div>
 
           {loadingTiers ? (
             <div className="text-center py-12">
-              <div className="w-6 h-6 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin mx-auto" />
+              <div className={`w-6 h-6 border-2 ${theme.progressBg} border-t-current rounded-full animate-spin mx-auto ${theme.body}`} />
             </div>
           ) : (
             <div className={`grid gap-6 ${tiers.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : tiers.length >= 3 ? 'md:grid-cols-3' : ''}`}>
@@ -170,10 +169,8 @@ export default function Landing() {
                 return (
                   <div
                     key={tier.name}
-                    className={`relative p-6 rounded-xl transition-colors ${
-                      isPopular
-                        ? `bg-zinc-900 border-2 ${accent.border}`
-                        : 'bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700'
+                    className={`relative p-6 rounded-xl transition-colors ${theme.cardBg} ${
+                      isPopular ? `border-2 ${accent.border}` : theme.cardHover
                     }`}
                   >
                     {isPopular && (
@@ -182,14 +179,14 @@ export default function Landing() {
                       </div>
                     )}
 
-                    <h3 className="text-lg font-medium mb-2">
+                    <h3 className={`text-lg font-medium mb-2 ${theme.heading}`}>
                       {tier.displayName || tier.name}
                     </h3>
                     <div className="mb-4">
-                      <span className="text-4xl font-light">${tier.price}</span>
-                      <span className="text-zinc-500">/mo</span>
+                      <span className={`text-4xl font-light ${theme.heading}`}>${tier.price}</span>
+                      <span className={theme.body}>/mo</span>
                     </div>
-                    <p className="text-zinc-500 text-sm mb-6">
+                    <p className={`${theme.body} text-sm mb-6`}>
                       {tier.limit === -1 ? 'Unlimited requests' : `${tier.limit.toLocaleString()} requests/mo`}
                     </p>
 
@@ -199,7 +196,7 @@ export default function Landing() {
                         className={`block w-full py-2.5 rounded text-sm font-medium text-center transition-colors ${
                           isPopular
                             ? `${accent.bg} text-white ${accent.bgHover}`
-                            : 'border border-zinc-700 text-zinc-300 hover:border-zinc-600 hover:text-white'
+                            : theme.buttonSecondary
                         }`}
                       >
                         {tier.price === 0 ? 'Current Plan' : 'Upgrade'}
@@ -210,7 +207,7 @@ export default function Landing() {
                         className={`block w-full py-2.5 rounded text-sm font-medium text-center transition-colors ${
                           isPopular
                             ? `${accent.bg} text-white ${accent.bgHover}`
-                            : 'border border-zinc-700 text-zinc-300 hover:border-zinc-600 hover:text-white'
+                            : theme.buttonSecondary
                         }`}
                       >
                         {tier.price === 0 ? 'Start Free' : 'Get Started'}
@@ -220,7 +217,7 @@ export default function Landing() {
                     {tier.features && tier.features.length > 0 && (
                       <ul className="mt-6 space-y-2">
                         {tier.features.map((feature, j) => (
-                          <li key={j} className="flex items-start gap-2 text-zinc-400 text-sm">
+                          <li key={j} className={`flex items-start gap-2 ${theme.body} text-sm`}>
                             <svg className={`w-4 h-4 mt-0.5 ${accent.text} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
@@ -238,21 +235,21 @@ export default function Landing() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-24 px-6 bg-zinc-900/30">
+      <section id="faq" className={`py-24 px-6 ${theme.sectionAltBg}`}>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-light mb-3">{CONFIG.faq.headline}</h2>
+            <h2 className={`text-3xl font-light mb-3 ${theme.heading}`}>{CONFIG.faq.headline}</h2>
           </div>
           <div className="space-y-4">
             {CONFIG.faq.items.map((item, i) => (
-              <div key={i} className="border border-zinc-800 rounded-xl overflow-hidden">
+              <div key={i} className={`${theme.cardBg} rounded-xl overflow-hidden`}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-zinc-900/50 transition-colors"
+                  className={`w-full px-6 py-4 text-left flex justify-between items-center ${theme.buttonHover} transition-colors`}
                 >
-                  <span className="font-medium">{item.question}</span>
+                  <span className={`font-medium ${theme.heading}`}>{item.question}</span>
                   <svg
-                    className={`w-5 h-5 text-zinc-500 transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 ${theme.muted} transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -262,7 +259,7 @@ export default function Landing() {
                 </button>
                 {openFaq === i && (
                   <div className="px-6 pb-4">
-                    <p className="text-zinc-400 text-sm">{item.answer}</p>
+                    <p className={`${theme.body} text-sm`}>{item.answer}</p>
                   </div>
                 )}
               </div>
@@ -274,8 +271,8 @@ export default function Landing() {
       {/* Final CTA */}
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-light mb-3">{CONFIG.finalCta.headline}</h2>
-          <p className="text-zinc-500 mb-8">{CONFIG.finalCta.subheadline}</p>
+          <h2 className={`text-3xl font-light mb-3 ${theme.heading}`}>{CONFIG.finalCta.headline}</h2>
+          <p className={`${theme.body} mb-8`}>{CONFIG.finalCta.subheadline}</p>
           {isSignedIn ? (
             <Link
               to="/dashboard"
