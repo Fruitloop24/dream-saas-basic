@@ -67,14 +67,17 @@ Available icons: `user`, `settings`, `rocket`, `check`, `chart`, `shield`, `ligh
 
 ---
 
-## Step 3: Pick Your Color
+## Step 3: Pick Your Theme & Color
 
-Ask: **"Pick your brand color: emerald (green), sky (blue), violet (purple), rose (pink), amber (orange), or zinc (gray)?"**
+Ask: **"Light mode or dark mode? And pick your accent color: emerald (green), sky (blue), violet (purple), rose (pink), amber (orange), or zinc (gray)?"**
 
 Update `src/config.ts`:
 ```typescript
+theme: '[light or dark]',
 accentColor: '[their choice]',
 ```
+
+**Theme switches everything** - backgrounds, text, cards, inputs, modals. One line change.
 
 ---
 

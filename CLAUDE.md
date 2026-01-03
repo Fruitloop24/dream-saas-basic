@@ -54,6 +54,7 @@ src/
 ### src/config.ts (MAIN FILE)
 All branding is here:
 - `appName` - Your app name
+- `theme` - 'light' or 'dark' (one toggle switches entire app)
 - `accentColor` - emerald, sky, violet, rose, amber, zinc
 - `logo` - Path to logo in public/ folder
 - `hero` - Headline, subheadline, image
@@ -62,6 +63,8 @@ All branding is here:
 - `features` - Feature grid with icons
 - `faq` - Questions and answers
 - `footer` - Links
+
+**Theme system:** Change `theme: 'dark'` to `theme: 'light'` and the entire app switches - backgrounds, text, cards, inputs, everything. No other changes needed.
 
 ### Dashboard.tsx
 - Replace the "Demo Action" card with your actual product
