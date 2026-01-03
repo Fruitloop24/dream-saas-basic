@@ -1,20 +1,37 @@
 # /setup - SaaS Template Setup
 
-You are setting up a Dream API SaaS template. Read the CLAUDE.md file first for full context.
+You are a helpful assistant setting up a Dream API SaaS template. Be enthusiastic about what they're getting - this is a full production-ready app, not a skeleton.
 
-**Key facts:**
-- SDK is published on npm as `@dream-api/sdk` - just run `npm install`
-- Publishable key (pk_xxx) is SAFE for frontend - like Stripe's publishable key
-- Pricing tiers are configured in the dream-api dashboard - they load via API
-- All branding goes in `src/config.ts` - one file for everything
+Read the CLAUDE.md file first for full context.
 
 ---
 
-## Step 1: API Key (DO THIS FIRST)
+## What They're Getting (Tell Them!)
+
+Before you start, explain what's included:
+
+"This template comes with everything wired up and ready to go:
+
+- **Authentication** - Sign up, sign in, sign out all working
+- **User Profile & Security** - Account settings dropdown already in the nav (powered by Clerk)
+- **Billing Portal** - Users can manage their subscription, update payment methods
+- **Usage Tracking** - Track any action and enforce limits by plan
+- **Pricing Page** - Pulls tiers from your dashboard automatically
+- **Beautiful Landing Page** - Just customize the text and colors
+
+All you need is your publishable key. One key, full app."
+
+---
+
+## Step 1: API Key
 
 Ask: **"What's your Dream API publishable key? It starts with `pk_test_` or `pk_live_`."**
 
-Explain: "This key is safe for frontend code - it's like Stripe's publishable key. You get it from your dream-api dashboard at [your-dashboard-url]. Your secret key (sk_) stays on your server only."
+Explain: "You get this from your Dream API dashboard after creating a project. Make sure you've already:
+1. Created a SaaS project in the dashboard
+2. Set up your tiers (prices, limits, features)
+
+The template pulls tiers from your dashboard - you control pricing there, not in code."
 
 Once they provide the key:
 
@@ -23,34 +40,36 @@ Once they provide the key:
 VITE_DREAM_PUBLISHABLE_KEY=[their key]
 ```
 
-2. Run these commands:
+2. Run:
 ```bash
-npm install
+npm install && npm run dev
 ```
 
-3. Tell them: "Dependencies installed. Your pricing tiers will load automatically from your dashboard - no configuration needed here."
+3. Say: "Open http://localhost:5173 - you should see your app running! Try clicking Sign Up to see the auth flow work."
 
 ---
 
-## Step 2: Branding (Quick)
+## Step 2: Tell Me About Your App
 
-Ask: **"Tell me about your app - what's it called and what does it do? I'll set up the branding."**
+Ask: **"What's your app called and what does it do? Give me 1-2 sentences and I'll set up all the branding."**
 
 From their answer, update `src/config.ts`:
 - `appName` - Their app name
-- `tagline` - Short tagline
-- `hero.headline` - Benefit-focused headline
-- `hero.subheadline` - What it does
-- `howItWorks.steps` - 3 steps based on their product
+- `tagline` - Short tagline (you write this based on their description)
+- `hero.headline` - Benefit-focused headline (you write this)
+- `hero.subheadline` - What it does in one sentence
+- `howItWorks.steps` - 3 simple steps for their product
 - `features.items` - 3-6 features with icons
 
-Available icons: `user`, `settings`, `rocket`, `check`, `chart`, `shield`, `lightning`, `globe`, `clock`, `code`
+**Be creative!** Write compelling copy based on what they told you.
+
+Available icons: `user`, `settings`, `rocket`, `check`, `chart`, `shield`, `lightning`, `globe`, `clock`, `code`, `star`, `heart`
 
 ---
 
-## Step 3: Style
+## Step 3: Pick Your Color
 
-Ask: **"Pick a color: emerald (green), sky (blue), violet (purple), rose (pink), amber (orange), or zinc (gray)?"**
+Ask: **"Pick your brand color: emerald (green), sky (blue), violet (purple), rose (pink), amber (orange), or zinc (gray)?"**
 
 Update `src/config.ts`:
 ```typescript
@@ -59,61 +78,109 @@ accentColor: '[their choice]',
 
 ---
 
-## Step 4: Logo (Optional)
+## Step 4: Logo & Images (Optional)
 
-Ask: **"Got a logo? Drop it in the `public/` folder and tell me the filename. Or skip for text-only."**
+Ask: **"Got a logo? Drop it in the `public/` folder and tell me the filename. Otherwise I'll use text."**
 
-If they have one, update `src/config.ts`:
+If they have one:
 ```typescript
 logo: '/[filename]',
 ```
 
----
+Then ask: **"Want a hero image or product screenshot? Same thing - drop it in `public/` and tell me the filename."**
 
-## Step 5: Hero Image (Optional)
-
-Ask: **"Want a hero image or screenshot? Drop it in `public/` and tell me the filename. Or skip for text-only hero."**
-
-If they have one, update `src/config.ts`:
+If they have one:
 ```typescript
 hero: {
-  // ... other fields
+  // ... keep other fields
   image: '/[filename]',
 },
 ```
 
 ---
 
-## Done
+## Step 5: Show Them What They Have
 
-Run:
-```bash
-npm run dev
-```
+Run `npm run dev` and walk them through:
+
+1. **Landing Page** - "This is your public homepage. All the text comes from config.ts."
+
+2. **Sign Up Flow** - "Click Get Started - this goes to Clerk's hosted signup. Users come back authenticated."
+
+3. **Dashboard** - "After login, users land here. The demo action tracks usage - replace this with your actual feature."
+
+4. **Profile Dropdown** - "Click your avatar in the top right:
+   - **Account Settings** → Clerk's user portal (profile, password, security)
+   - **Billing** → Stripe's billing portal (payment methods, invoices)
+   - **Sign Out** → Logs them out
+
+   All of this is already wired up. You didn't have to build any of it."
+
+5. **Pricing Page** - "These tiers come from your Dream API dashboard. Change prices there, they update here automatically."
+
+---
+
+## Step 6: More Customization (Optional)
+
+Ask: **"Want to customize more before we launch? I can help with:"**
+- FAQ section content
+- Footer links
+- Social proof logos (drop images in public/)
+- How It Works steps
+
+If they want to customize more, walk them through each section in `src/config.ts`.
+
+If they're ready to move on, continue.
+
+---
+
+## Done! What's Next
 
 Tell them:
-- "Your app is running at http://localhost:5173"
-- "Pricing tiers load from your dream-api dashboard"
-- "Auth, billing, and usage tracking are all wired up"
-- "Edit `src/config.ts` anytime to change branding"
-- "Edit `src/pages/Dashboard.tsx` to add your actual product features"
+
+"Your SaaS is ready! Here's what you control:
+
+**In the template (customize anytime):**
+- Branding, colors, copy in `src/config.ts`
+- Your product UI in `src/pages/Dashboard.tsx`
+- Images in `public/` folder
+
+**In the Dream API dashboard:**
+- Tier names, prices, limits
+- Features per tier
+- Customer management
+- Revenue metrics
+
+Change tiers/prices in dashboard → Your app updates automatically.
+
+**Next steps:**
+1. **Add your product** - Edit `src/pages/Dashboard.tsx` to add your actual feature
+2. **Track usage** - Call `api.usage.track()` when users do billable actions
+3. **Deploy** - Run `npm run build` and deploy the `dist/` folder anywhere
+
+**Want to make it installable as a phone app?** Run `/pwa` and I'll add Progressive Web App support - your users can install it from their browser.
+
+**Need help?** Check CLAUDE.md for SDK methods and examples."
 
 ---
 
-## Reference
+## Quick Reference
 
-See CLAUDE.md for:
-- SDK methods (`api.usage.track()`, `api.billing.createCheckout()`, etc.)
-- File structure
-- What not to modify
-- Deployment instructions
+Already wired up (don't rebuild these):
+- `dreamAPI.auth.getSignUpUrl()` - New user signup
+- `dreamAPI.auth.getSignInUrl()` - Returning users
+- `dreamAPI.auth.getCustomerPortalUrl()` - Account settings (Clerk)
+- `api.billing.openPortal()` - Billing management (Stripe)
+- `api.usage.track()` - Increment usage counter
+- `api.usage.check()` - Get current usage
+- `api.billing.createCheckout({ tier })` - Upgrade flow
 
 ---
 
-## If Things Go Wrong
+## Troubleshooting
 
-**"npm install failed"** - Check Node version (need 18+), try `rm -rf node_modules && npm install`
+**"Can't sign up"** - Check your publishable key in `.env.local`
 
-**"Tiers not loading"** - Check publishable key in `.env.local`, make sure it matches dashboard
+**"Tiers not loading"** - Make sure you've created tiers in your Dream API dashboard
 
-**"Auth not working"** - The SDK handles this automatically. Don't build custom auth forms.
+**"npm install failed"** - Need Node 18+. Try `rm -rf node_modules && npm install`

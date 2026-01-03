@@ -4,11 +4,16 @@ SaaS starter template powered by Dream API. Auth, billing, and usage tracking in
 
 ## IMPORTANT - How This Works
 
-**The SDK is published on npm.** When you run `npm install`, you get `@dream-api/sdk` from the npm registry. Nothing is local. The developer just needs their publishable key from the dream-api dashboard.
+**Dashboard First:** Before using this template, set up your project in the Dream API dashboard:
+1. Create a project (SaaS type)
+2. Configure your tiers (prices, limits, features)
+3. Get your publishable key
 
-**Pricing tiers are configured in the dashboard.** The template pulls them via API. Don't hardcode prices.
+**The template pulls everything from your dashboard.** Tiers, prices, limits - all controlled there. Change them anytime and your app updates automatically.
 
-**The publishable key (pk_xxx) is safe for frontend.** It's like Stripe's publishable key - designed to be in browser code.
+**The SDK is on npm.** Just `npm install` to get `@dream-api/sdk`.
+
+**The publishable key (pk_xxx) is safe for frontend.** Like Stripe's publishable key - designed for browser code.
 
 ## Quick Start
 
@@ -104,6 +109,18 @@ Deploy `dist/` anywhere:
 - **Cloudflare Pages**: `npx wrangler pages deploy dist`
 - **Vercel/Netlify**: Connect repo, set VITE_DREAM_PUBLISHABLE_KEY env var
 
+## What You Control in Dashboard vs Template
+
+| In Dashboard | In Template |
+|--------------|-------------|
+| Tier names, prices, limits | Branding, colors, copy |
+| Features per tier | Landing page content |
+| Usage resets | Dashboard UI for your product |
+| Customer list | Images in public/ folder |
+| Revenue metrics | |
+
+**Change tiers/prices in dashboard → App updates automatically.**
+
 ## Don't Do These Things
 
 - Don't hardcode prices (they come from API)
@@ -111,3 +128,8 @@ Deploy `dist/` anywhere:
 - Don't modify useDreamAPI.tsx
 - Don't build custom auth UI
 - Don't add "delete account" buttons (use getCustomerPortalUrl())
+
+## Admin Operations
+
+Need to manage customers, view metrics, or use admin API?
+That's all in the **Dream API Dashboard** - not in your frontend code.
