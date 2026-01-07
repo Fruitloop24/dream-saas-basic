@@ -43,7 +43,7 @@ export default function Landing() {
           <div className={`grid ${CONFIG.hero.image ? 'lg:grid-cols-2 gap-12 items-center' : ''}`}>
             {/* Hero Content */}
             <div className={CONFIG.hero.image ? '' : 'text-center max-w-4xl mx-auto'}>
-              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6 ${theme.heading}`}>
+              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 ${theme.heading}`}>
                 {CONFIG.hero.headline}
               </h1>
               <p className={`text-lg md:text-xl ${theme.body} mb-10 max-w-2xl`}>

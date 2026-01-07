@@ -4,7 +4,7 @@
  * Uses shared config from src/config.ts
  */
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDreamAPI } from '../hooks/useDreamAPI';
 import { getAccentClasses, getThemeClasses } from '../config';
@@ -25,6 +25,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [searchParams] = useSearchParams();
+  const successHandled = useRef(false);
 
   const accent = getAccentClasses();
   const theme = getThemeClasses();
@@ -71,21 +72,28 @@ export default function Dashboard() {
     }
   };
 
+  // Handle success redirect from Stripe (only once)
   useEffect(() => {
     const success = searchParams.get('success');
-    if (success === 'true') {
+    if (success === 'true' && !successHandled.current) {
+      successHandled.current = true;
       setMessage('Upgrade successful!');
+      window.history.replaceState({}, '', '/dashboard');
       const refresh = async () => {
         await refreshUser();
         await fetchUsage();
-        window.history.replaceState({}, '', '/dashboard');
         setTimeout(() => setMessage(''), 3000);
       };
       setTimeout(refresh, 1500);
-    } else if (isReady) {
+    }
+  }, [searchParams, refreshUser, fetchUsage]);
+
+  // Initial usage fetch
+  useEffect(() => {
+    if (isReady && !successHandled.current) {
       fetchUsage();
     }
-  }, [isReady, searchParams, fetchUsage, refreshUser]);
+  }, [isReady, fetchUsage]);
 
   return (
     <div className={`min-h-screen ${theme.pageBg}`}>

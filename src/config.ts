@@ -4,14 +4,14 @@
  * ============================================================================
  *
  * This is the ONLY file you need to edit for branding.
- * All pages import from here.
+ * All pages import from here. Run /setup to customize with AI assistance.
  */
 
 export const CONFIG = {
   // -------------------------------------------------------------------------
   // BRAND
   // -------------------------------------------------------------------------
-  appName: 'YourApp',
+  appName: 'My SaaS',
   tagline: 'Your tagline here',
 
   // Logo: place file in public/ folder, or set to null for text-only
@@ -28,10 +28,10 @@ export const CONFIG = {
   // HERO SECTION
   // -------------------------------------------------------------------------
   hero: {
-    headline: 'Your headline goes here',
-    subheadline: 'Describe what your product does in one or two sentences.',
-    cta: 'Start Free',
-    ctaSubtext: 'No credit card required',
+    headline: 'Build something amazing',
+    subheadline: 'A brief description of what your product does and why customers will love it.',
+    cta: 'Get Started',
+    ctaSubtext: 'Free to start',
     // Hero image: place in public/, or null for no image
     image: null as string | null, // e.g., '/hero-mockup.png'
   },
@@ -62,18 +62,18 @@ export const CONFIG = {
         number: '1',
         title: 'Sign Up',
         description: 'Create your free account in seconds.',
-        icon: 'user', // user, settings, rocket, check, chart, shield
+        icon: 'user',
       },
       {
         number: '2',
         title: 'Configure',
-        description: 'Set up your preferences and connect your tools.',
+        description: 'Set up your preferences and get started.',
         icon: 'settings',
       },
       {
         number: '3',
         title: 'Launch',
-        description: 'Start using the platform and see results.',
+        description: 'Start using the platform immediately.',
         icon: 'rocket',
       },
     ],
@@ -87,34 +87,34 @@ export const CONFIG = {
     subheadline: 'Powerful features to help you succeed',
     items: [
       {
-        title: 'Feature One',
-        description: 'Brief description of what this feature does.',
+        title: 'Easy to Use',
+        description: 'Intuitive interface that anyone can master quickly.',
         icon: 'check',
       },
       {
-        title: 'Feature Two',
-        description: 'Brief description of what this feature does.',
-        icon: 'chart',
-      },
-      {
-        title: 'Feature Three',
-        description: 'Brief description of what this feature does.',
+        title: 'Secure',
+        description: 'Enterprise-grade security to protect your data.',
         icon: 'shield',
       },
       {
-        title: 'Feature Four',
-        description: 'Brief description of what this feature does.',
-        icon: 'settings',
+        title: 'Fast',
+        description: 'Lightning-fast performance you can count on.',
+        icon: 'lightning',
       },
       {
-        title: 'Feature Five',
-        description: 'Brief description of what this feature does.',
-        icon: 'rocket',
+        title: 'Analytics',
+        description: 'Detailed insights to track your progress.',
+        icon: 'chart',
       },
       {
-        title: 'Feature Six',
-        description: 'Brief description of what this feature does.',
+        title: 'Support',
+        description: 'Friendly support team ready to help.',
         icon: 'user',
+      },
+      {
+        title: 'Integrations',
+        description: 'Connect with your favorite tools.',
+        icon: 'globe',
       },
     ],
   },
@@ -131,23 +131,23 @@ export const CONFIG = {
   // FAQ
   // -------------------------------------------------------------------------
   faq: {
-    headline: 'Questions & Answers',
+    headline: 'Frequently Asked Questions',
     items: [
       {
-        question: 'How does the free plan work?',
-        answer: 'The free plan gives you access to core features with usage limits. No credit card required.',
+        question: 'How do I get started?',
+        answer: 'Simply sign up for a free account and follow our quick setup guide. You\'ll be up and running in minutes.',
       },
       {
-        question: 'Can I upgrade or downgrade anytime?',
-        answer: 'Yes, you can change your plan at any time. Changes take effect on your next billing cycle.',
+        question: 'Can I cancel anytime?',
+        answer: 'Yes, you can cancel your subscription at any time. No long-term contracts or hidden fees.',
       },
       {
-        question: 'What payment methods do you accept?',
-        answer: 'We accept all major credit cards through Stripe.',
+        question: 'Is my data secure?',
+        answer: 'Absolutely. We use industry-standard encryption and security practices to keep your data safe.',
       },
       {
-        question: 'How do I cancel my subscription?',
-        answer: 'You can cancel anytime from your billing settings. Access continues until your billing period ends.',
+        question: 'Do you offer support?',
+        answer: 'Yes, we offer support via email for all plans, with priority support for paid plans.',
       },
     ],
   },
@@ -157,8 +157,8 @@ export const CONFIG = {
   // -------------------------------------------------------------------------
   finalCta: {
     headline: 'Ready to get started?',
-    subheadline: 'Join thousands of users already on the platform.',
-    cta: 'Start Free Today',
+    subheadline: 'Join thousands of happy customers today.',
+    cta: 'Start Free Trial',
   },
 
   // -------------------------------------------------------------------------
@@ -180,52 +180,52 @@ export const CONFIG = {
 
 const ACCENT_COLORS = {
   emerald: {
-    bg: 'bg-emerald-500',
-    bgHover: 'hover:bg-emerald-400',
-    text: 'text-emerald-500',
-    textHover: 'hover:text-emerald-400',
-    border: 'border-emerald-500',
-    hex: '#10b981',
+    bg: 'bg-emerald-600',
+    bgHover: 'hover:bg-emerald-500',
+    text: 'text-emerald-600',
+    textHover: 'hover:text-emerald-500',
+    border: 'border-emerald-600',
+    hex: '#059669',
   },
   sky: {
-    bg: 'bg-sky-500',
-    bgHover: 'hover:bg-sky-400',
-    text: 'text-sky-500',
-    textHover: 'hover:text-sky-400',
-    border: 'border-sky-500',
-    hex: '#0ea5e9',
+    bg: 'bg-sky-600',
+    bgHover: 'hover:bg-sky-500',
+    text: 'text-sky-600',
+    textHover: 'hover:text-sky-500',
+    border: 'border-sky-600',
+    hex: '#0284c7',
   },
   violet: {
-    bg: 'bg-violet-500',
-    bgHover: 'hover:bg-violet-400',
-    text: 'text-violet-500',
-    textHover: 'hover:text-violet-400',
-    border: 'border-violet-500',
-    hex: '#8b5cf6',
+    bg: 'bg-violet-600',
+    bgHover: 'hover:bg-violet-500',
+    text: 'text-violet-600',
+    textHover: 'hover:text-violet-500',
+    border: 'border-violet-600',
+    hex: '#7c3aed',
   },
   rose: {
-    bg: 'bg-rose-500',
-    bgHover: 'hover:bg-rose-400',
-    text: 'text-rose-500',
-    textHover: 'hover:text-rose-400',
-    border: 'border-rose-500',
-    hex: '#f43f5e',
+    bg: 'bg-rose-600',
+    bgHover: 'hover:bg-rose-500',
+    text: 'text-rose-600',
+    textHover: 'hover:text-rose-500',
+    border: 'border-rose-600',
+    hex: '#e11d48',
   },
   amber: {
-    bg: 'bg-amber-500',
-    bgHover: 'hover:bg-amber-400',
-    text: 'text-amber-500',
-    textHover: 'hover:text-amber-400',
-    border: 'border-amber-500',
-    hex: '#f59e0b',
+    bg: 'bg-amber-600',
+    bgHover: 'hover:bg-amber-500',
+    text: 'text-amber-600',
+    textHover: 'hover:text-amber-500',
+    border: 'border-amber-600',
+    hex: '#d97706',
   },
   zinc: {
-    bg: 'bg-zinc-100',
-    bgHover: 'hover:bg-white',
-    text: 'text-zinc-100',
-    textHover: 'hover:text-white',
-    border: 'border-zinc-100',
-    hex: '#f4f4f5',
+    bg: 'bg-zinc-800',
+    bgHover: 'hover:bg-zinc-700',
+    text: 'text-zinc-800',
+    textHover: 'hover:text-zinc-700',
+    border: 'border-zinc-800',
+    hex: '#27272a',
   },
 };
 
@@ -270,14 +270,14 @@ const THEMES = {
   dark: {
     // Main backgrounds
     pageBg: 'bg-zinc-950',
-    navBg: 'bg-zinc-950 border-b border-zinc-900',
-    cardBg: 'bg-zinc-900/50 border border-zinc-800',
-    sectionAltBg: 'bg-zinc-900/30',
-    footerBg: 'bg-zinc-950 border-t border-zinc-900',
+    navBg: 'bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50',
+    cardBg: 'bg-zinc-900/70 border border-zinc-700/50',
+    sectionAltBg: 'bg-zinc-900/40',
+    footerBg: 'bg-zinc-950 border-t border-zinc-800',
     // Text colors
-    heading: 'text-zinc-100',
-    body: 'text-zinc-400',
-    muted: 'text-zinc-600',
+    heading: 'text-white',
+    body: 'text-zinc-300',
+    muted: 'text-zinc-500',
     // Interactive
     cardHover: 'hover:border-zinc-700',
     link: 'text-zinc-500 hover:text-zinc-300',
