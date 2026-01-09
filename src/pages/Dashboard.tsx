@@ -178,7 +178,35 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Demo Action Card - REPLACE THIS WITH YOUR PRODUCT */}
+          {/* ================================================================
+              YOUR PRODUCT GOES HERE
+              ================================================================
+
+              Replace this entire card with your product's main feature.
+
+              KEEP THIS PATTERN:
+              1. User does something (generates PDF, runs AI, processes file)
+              2. You call: await api.usage.track()
+              3. That's it - limits are enforced automatically
+
+              EXAMPLE - PDF Generator:
+              ----------------------------------------------------------------
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                const res = await fetch('https://your-api.com/generate', { ... });
+                if (res.ok) {
+                  await api.usage.track();  // <-- THIS IS THE MAGIC LINE
+                  // Show download link, success message, etc.
+                }
+              }}>
+                <input type="file" />
+                <button>Generate PDF</button>
+              </form>
+              ----------------------------------------------------------------
+
+              The handleTrackUsage function below is just a demo.
+              Delete it and add your own product logic.
+              ================================================================ */}
           <div className={`${theme.cardBg} rounded-xl p-6`}>
             <h2 className={`text-xs ${theme.muted} font-medium uppercase tracking-wider mb-4`}>Demo Action</h2>
             <p className={`${theme.body} text-sm mb-4`}>

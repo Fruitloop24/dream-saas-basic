@@ -45,7 +45,7 @@ VITE_DREAM_PUBLISHABLE_KEY=[their key]
 npm install && npm run dev
 ```
 
-3. Say: "Open http://localhost:5173 - you should see your app running! Try clicking Sign Up to see the auth flow work."
+3. Say: "Open http://localhost:5173 - you should see your app running! Try clicking Sign Up to see the auth flow work. **Then come back here** - we're going to customize everything for your brand."
 
 ---
 

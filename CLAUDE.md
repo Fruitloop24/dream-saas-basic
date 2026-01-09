@@ -18,19 +18,34 @@ SaaS starter template powered by Dream API. Auth, billing, and usage tracking in
 ## Quick Start
 
 ```bash
-npm install          # Gets @dream-api/sdk from npm
+npm install
+cp .env.example .env.local
+# Add your publishable key to .env.local
 npm run dev
 ```
 
-Set `VITE_DREAM_PUBLISHABLE_KEY` in `.env.local` with your key from dream-api dashboard.
+**That's it.** Your SaaS app now has:
+- User authentication (sign up, sign in, sign out)
+- Stripe billing (subscriptions, payment portal)
+- Usage tracking (metered billing ready)
+- Pricing page (pulls tiers from your dashboard)
 
-## Setup Command
+Go check it out at **http://localhost:5173** - click around, try signing up. It all works. **Then come back here** - that was just the foundation.
 
-Run `/setup` for guided configuration:
-1. Get your publishable key
-2. Install dependencies
-3. Configure branding
-4. Done - auth, billing, usage all wired up
+## Let's Customize This Thing
+
+**Now I can customize almost anything for you:**
+- Brand name, colors, theme (dark/light)
+- Headlines, copy, and messaging for YOUR product
+- Feature lists with custom icons
+- Pricing descriptions and tier benefits
+- Hero images, logos, custom sections
+- Layouts, spacing, styling tweaks
+- Usage dashboard customization
+
+**Just tell me what you're building.** "I'm building an AI writing tool" or "Make it feel more enterprise" - I'll rewrite the copy, pick the right icons, adjust the styling.
+
+Run `/setup` for a guided walkthrough, or just start asking me to change things. This is where it gets fun.
 
 ## File Structure
 
@@ -66,9 +81,49 @@ All branding is here:
 
 **Theme system:** Change `theme: 'dark'` to `theme: 'light'` and the entire app switches - backgrounds, text, cards, inputs, everything. No other changes needed.
 
-### Dashboard.tsx
-- Replace the "Demo Action" card with your actual product
-- Call `api.usage.track()` when users consume a resource
+### Dashboard.tsx - YOUR PRODUCT GOES HERE
+
+The dashboard has a placeholder card marked `YOUR PRODUCT GOES HERE`.
+
+**To add your product:**
+
+1. Open `src/pages/Dashboard.tsx`
+2. Find the comment block `YOUR PRODUCT GOES HERE`
+3. Replace the demo card with your product UI
+4. Keep the `api.usage.track()` call - this is how billing works
+
+**Example - Adding a PDF Generator:**
+
+```tsx
+// Replace the demo card with:
+<div className={`${theme.cardBg} rounded-xl p-6`}>
+  <h2>Generate PDF</h2>
+  <form onSubmit={async (e) => {
+    e.preventDefault();
+
+    // 1. Call YOUR product API
+    const res = await fetch('https://your-api.com/generate-pdf', {
+      method: 'POST',
+      body: formData,
+    });
+
+    // 2. Track usage (THIS IS THE MAGIC LINE)
+    if (res.ok) {
+      await api.usage.track();  // Limits enforced automatically
+      // Show success, download link, etc.
+    }
+  }}>
+    <input type="file" name="document" />
+    <button type="submit">Generate</button>
+  </form>
+</div>
+```
+
+**The pattern is always:**
+1. User does something (uploads file, clicks button, submits form)
+2. You call your backend/API
+3. On success, call `await api.usage.track()`
+4. Limits are automatically enforced based on their plan
 
 ## What NOT To Modify
 
