@@ -10,10 +10,29 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> •
-  <a href="#the-ai-way">AI Setup</a> •
   <a href="#why-dream-api">Why Dream API</a> •
-  <a href="#make-it-yours">Make It Yours</a>
+  <a href="#manual-setup">Manual Setup</a> •
+  <a href="#deploy">Deploy</a>
 </p>
+
+---
+
+## Quick Start
+
+Open this project in **Claude Code**, **Cursor**, or **Windsurf** and run:
+
+```
+/setup
+```
+
+That's it. The AI walks you through everything:
+- 🔑 **API Key** - Paste your publishable key, done
+- 🎨 **Branding** - Tell it your app name, it writes your headlines
+- ✍️ **Copy** - Describe your product, it writes compelling copy
+- 🎯 **Features** - List what you do, it picks icons and layouts
+- 🌙 **Theme** - Light mode? Dark mode? Gradients? Just ask
+
+**"I'm building an AI that writes legal contracts"** → Done. Branded. Ready to ship.
 
 ---
 
@@ -41,7 +60,37 @@ Every SaaS needs the same boring stuff: authentication, billing, usage limits, s
 
 ---
 
-## Quick Start
+## Make It Installable
+
+Want users to install your SaaS like a native app? Run:
+
+```
+/pwa
+```
+
+Boom:
+- 📱 **Install from browser** - "Add to Home Screen" prompt
+- ⚡ **Works offline** - Cached assets, instant loads
+- 🚫 **Skip the app stores** - No 30% Apple/Google tax
+- 📲 **QR codes** - Print on business cards, embed on your site
+
+---
+
+## Your Dashboard
+
+Your Dream API dashboard controls the business logic. Set it up once:
+
+- **Tier prices** ($9, $29, $99) → Pricing page updates automatically
+- **Usage limits** (100, 1000, unlimited) → Limits enforced automatically
+- **Feature flags per tier** → Features gate automatically
+
+**Change prices at 2am → Your app updates instantly.** No deploy needed.
+
+---
+
+## Manual Setup
+
+Prefer doing it yourself? No problem.
 
 ```bash
 git clone https://github.com/Fruitloop24/dream-saas-basic.git my-saas
@@ -59,33 +108,11 @@ VITE_DREAM_PUBLISHABLE_KEY=pk_test_xxx
 npm run dev
 ```
 
-**Open http://localhost:5173** - Your SaaS is live. Click around. Sign up works. Billing works. Everything works.
-
----
-
-## The AI Way
-
-This is where it gets fun. Open the project in **Claude Code**, **Cursor**, or **Windsurf** and run:
-
-```
-/setup
-```
-
-The AI becomes your co-founder:
-- 🎨 **Branding** - Tell it your app name, it writes your headlines
-- ✍️ **Copy** - Describe your product, it writes compelling copy
-- 🎯 **Features** - List what you do, it picks icons and layouts
-- 🌙 **Theme** - Light mode? Dark mode? Gradients? Just ask
-
-**"I'm building an AI that writes legal contracts"** → Done. Branded. Ready to ship.
-
----
-
-## Make It Yours
+Open http://localhost:5173 - your SaaS is running.
 
 ### The Config File
 
-Everything lives in `src/config.ts`. Change it, see it instantly:
+Everything lives in `src/config.ts`:
 
 ```typescript
 export const config = {
@@ -98,12 +125,6 @@ export const config = {
     headline: 'Stop paying lawyers $500/hour',
     subheadline: 'AI-powered contracts reviewed in seconds, not weeks',
   },
-
-  features: [
-    { icon: 'lightning', title: 'Instant Generation', description: '...' },
-    { icon: 'shield', title: 'Legally Binding', description: '...' },
-    { icon: 'clock', title: 'Save 10+ Hours', description: '...' },
-  ],
 }
 ```
 
@@ -111,37 +132,7 @@ export const config = {
 
 Find `src/pages/Dashboard.tsx`. There's a big comment: **YOUR PRODUCT GOES HERE**.
 
-That's where your magic happens. The template handles everything around it.
-
----
-
-## Make It Installable
-
-Want users to install your SaaS like a native app? Run:
-
-```
-/pwa
-```
-
-Boom:
-- 📱 **Install from browser** - "Add to Home Screen" prompt
-- ⚡ **Works offline** - Cached assets, instant loads
-- 🚫 **Skip the app stores** - No 30% Apple/Google tax
-- 📲 **QR codes** - Print on business cards, embed on your site
-
----
-
-## What's in Your Dashboard
-
-Your [Dream API dashboard](https://dreamapi.dev) controls the business logic:
-
-| You Set | App Updates |
-|---------|-------------|
-| Tier prices ($9, $29, $99) | Pricing page shows new prices |
-| Usage limits (100, 1000, unlimited) | Limits enforced automatically |
-| Feature flags per tier | Features gate automatically |
-
-**Change prices at 2am → Your app updates instantly.** No deploy needed.
+That's where your magic happens.
 
 ---
 
@@ -159,7 +150,7 @@ You don't configure Clerk. You don't touch Stripe. You just build.
 
 ---
 
-## Deploy in 60 Seconds
+## Deploy
 
 ```bash
 npm run build
