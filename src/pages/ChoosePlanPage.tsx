@@ -141,7 +141,7 @@ export default function ChoosePlanPage() {
                 </h3>
 
                 <div className="mb-4">
-                  <span className={`text-3xl font-light ${theme.heading}`}>${tier.price}</span>
+                  <span className={`text-3xl font-light ${theme.heading}`}>${(tier.price / 100).toFixed(2)}</span>
                   <span className={`${theme.body} text-sm`}>/month</span>
                 </div>
 

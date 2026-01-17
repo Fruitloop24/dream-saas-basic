@@ -18,7 +18,7 @@ interface UsageData {
 }
 
 export default function Dashboard() {
-  const { api, isReady, user, refreshUser } = useDreamAPI();
+  const { api, isReady, user } = useDreamAPI();
   const navigate = useNavigate();
 
   const [usage, setUsage] = useState<UsageData | null>(null);
@@ -72,21 +72,19 @@ export default function Dashboard() {
     }
   };
 
-  // Handle success redirect from Stripe (only once)
+  // Handle success redirect from Stripe - reload to get fresh data
   useEffect(() => {
     const success = searchParams.get('success');
     if (success === 'true' && !successHandled.current) {
       successHandled.current = true;
       setMessage('Upgrade successful!');
-      window.history.replaceState({}, '', '/dashboard');
-      const refresh = async () => {
-        await refreshUser();
-        await fetchUsage();
-        setTimeout(() => setMessage(''), 3000);
-      };
-      setTimeout(refresh, 1500);
+
+      // Wait for webhook to process, then reload to get fresh data
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 2000);
     }
-  }, [searchParams, refreshUser, fetchUsage]);
+  }, [searchParams]);
 
   // Initial usage fetch
   useEffect(() => {

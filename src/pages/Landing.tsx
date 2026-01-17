@@ -4,7 +4,7 @@
  * All customization is in src/config.ts - NOT in this file.
  */
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDreamAPI, dreamAPI } from '../hooks/useDreamAPI';
 import { CONFIG, getAccentClasses, getThemeClasses } from '../config';
@@ -13,13 +13,21 @@ import Icon from '../components/Icons';
 import type { Tier } from '@dream-api/sdk';
 
 export default function Landing() {
-  const { isSignedIn } = useDreamAPI();
+  const { isSignedIn, isReady } = useDreamAPI();
+  const navigate = useNavigate();
   const [tiers, setTiers] = useState<Tier[]>([]);
   const [loadingTiers, setLoadingTiers] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const accent = getAccentClasses();
   const theme = getThemeClasses();
+
+  // Auto-redirect signed-in users to dashboard
+  useEffect(() => {
+    if (isReady && isSignedIn) {
+      navigate('/dashboard');
+    }
+  }, [isReady, isSignedIn, navigate]);
 
   useEffect(() => {
     dreamAPI.products.listTiers()
