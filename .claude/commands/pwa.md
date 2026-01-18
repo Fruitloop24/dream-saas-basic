@@ -103,45 +103,7 @@ If they don't have icons, offer to help them think of what to use, or suggest us
 
 ---
 
-## Step 4: Add QR Code for Easy Install
-
-Ask: **"Want to add a QR code so users can easily install on their phone? Great for sharing!"**
-
-If yes, explain:
-
-"Here's how to add an install QR code:
-
-1. **Generate your QR code** - After you deploy, use [QR Code Generator](https://www.qr-code-generator.com/) with your live URL
-
-2. **Add to your landing page** - I can add an 'Install App' section to your landing page with the QR code
-
-3. **Use cases:**
-   - Landing page footer
-   - Email signatures
-   - Social media posts
-   - Physical materials (stickers, flyers, business cards)"
-
-If they want to add it to the landing page, offer to add a section like:
-
-```tsx
-{/* Install App CTA */}
-<section className="py-16 px-6 text-center">
-  <h2 className="text-2xl font-light mb-4">Install the App</h2>
-  <p className="text-zinc-500 mb-6">Scan to install on your phone - no app store needed</p>
-  <img
-    src="/qr-code.png"
-    alt="Scan to install"
-    className="mx-auto w-48 h-48 rounded-lg"
-  />
-  <p className="text-zinc-600 text-sm mt-4">Works on iPhone, Android, and desktop</p>
-</section>
-```
-
-Tell them to save their QR code as `public/qr-code.png`.
-
----
-
-## Step 5: Test PWA
+## Step 4: Test PWA
 
 Run:
 ```bash
@@ -162,26 +124,104 @@ The app icon will appear on their home screen!"
 
 ---
 
+## Step 5: Deploy
+
+Tell them:
+
+"Your PWA is ready! Deploy it now:
+
+```bash
+npm run build
+```
+
+**Deploy options:**
+- **Cloudflare Pages**: `npx wrangler pages deploy dist`
+- **Vercel/Netlify**: Connect repo, set `VITE_DREAM_PUBLISHABLE_KEY` env var
+
+Make sure you're on HTTPS (required for PWA to work)."
+
+Ask: **"What's your deployed URL? (e.g., https://myapp.pages.dev)"**
+
+---
+
+## Step 6: Generate QR Code
+
+Once they provide the URL, generate a QR code using Python:
+
+```bash
+# Create a virtual environment and install qrcode
+python3 -m venv qr-venv
+source qr-venv/bin/activate  # On Windows: qr-venv\Scripts\activate
+pip install qrcode[pil]
+```
+
+Then generate the QR code:
+
+```bash
+python3 -c "
+import qrcode
+qr = qrcode.QRCode(version=1, box_size=10, border=2)
+qr.add_data('THEIR_DEPLOYED_URL_HERE')
+qr.make(fit=True)
+img = qr.make_image(fill_color='black', back_color='white')
+img.save('public/qr-code.png')
+print('QR code saved to public/qr-code.png')
+"
+```
+
+**Replace `THEIR_DEPLOYED_URL_HERE` with their actual URL.**
+
+After generating, clean up:
+```bash
+deactivate
+rm -rf qr-venv
+```
+
+---
+
+## Step 7: Embed QR Code in Landing Page
+
+Ask: **"Want me to add the QR code to your landing page?"**
+
+If yes, add this section to the landing page (before the footer):
+
+```tsx
+{/* Install App CTA */}
+<section className="py-16 px-6 text-center">
+  <h2 className="text-2xl font-light mb-4">Install the App</h2>
+  <p className="text-zinc-500 mb-6">Scan to install on your phone - no app store needed</p>
+  <img
+    src="/qr-code.png"
+    alt="Scan to install"
+    className="mx-auto w-48 h-48 rounded-lg"
+  />
+  <p className="text-zinc-600 text-sm mt-4">Works on iPhone, Android, and desktop</p>
+</section>
+```
+
+Tell them: "After adding the QR section, redeploy to see it live:
+```bash
+npm run build && npx wrangler pages deploy dist
+```"
+
+---
+
 ## Done!
 
 Tell them:
 
-"Your app is now installable as a PWA! Users can:
+"Your app is now installable as a PWA with a QR code! Users can:
 
+- **Scan the QR** - Opens your app instantly
 - **Install from browser** - No app store needed
 - **Launch from home screen** - Full screen, native feel
 - **Work offline** - Cached pages load instantly
 
-**Deployment tips:**
-- Make sure you're on HTTPS (required for PWA)
-- Cloudflare Pages, Vercel, Netlify all work great
-- The service worker caches assets automatically
-
-**QR Code reminder:**
-After you deploy to your live URL:
-1. Generate a QR code pointing to your site
-2. Save as `public/qr-code.png`
-3. Add to landing page, emails, or print materials
+**Use your QR code everywhere:**
+- Landing page (already added!)
+- Email signatures
+- Social media posts
+- Business cards, stickers, flyers
 
 Users scan → Install → Done. No app store fees, no review process!"
 
@@ -200,3 +240,8 @@ Users scan → Install → Done. No app store fees, no review process!"
 **"Service worker not updating"**
 - Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
 - Clear site data in DevTools → Application → Storage
+
+**"QR code generation failed"**
+- Make sure Python 3 is installed: `python3 --version`
+- Try `pip3` instead of `pip` if needed
+- On some systems: `python -m venv` instead of `python3 -m venv`
