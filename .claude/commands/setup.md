@@ -19,7 +19,9 @@ Before you start, explain what's included:
 - **Pricing Page** - Pulls tiers from your dashboard automatically
 - **Beautiful Landing Page** - Just customize the text and colors
 
-All you need is your publishable key. One key, full app."
+All you need is your publishable key. One key, full app.
+
+**After setup, you can customize anything through natural language.** Just tell me what you want - 'make it darker', 'write copy for my fitness app', 'add a gradient hero' - and I'll make it happen."
 
 ---
 
