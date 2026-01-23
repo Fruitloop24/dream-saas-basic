@@ -31,7 +31,11 @@ export default function Landing() {
 
   useEffect(() => {
     dreamAPI.products.listTiers()
-      .then(res => setTiers(res.tiers || []))
+      .then(res => {
+        // Sort tiers by price ascending (least to greatest)
+        const sorted = (res.tiers || []).sort((a, b) => a.price - b.price);
+        setTiers(sorted);
+      })
       .catch(console.error)
       .finally(() => setLoadingTiers(false));
   }, []);
@@ -191,7 +195,7 @@ export default function Landing() {
                       {tier.displayName || tier.name}
                     </h3>
                     <div className="mb-4">
-                      <span className={`text-4xl font-light ${theme.heading}`}>${tier.price}</span>
+                      <span className={`text-4xl font-light ${theme.heading}`}>${(tier.price / 100).toFixed(tier.price % 100 === 0 ? 0 : 2)}</span>
                       <span className={theme.body}>/mo</span>
                     </div>
                     <p className={`${theme.body} text-sm mb-6`}>
