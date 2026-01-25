@@ -25,6 +25,8 @@ Open this project in **Claude Code**, **Cursor**, or **Windsurf** and run:
 /setup
 ```
 
+> 💡 Commands live in `.claude/commands/` — the standard location for AI editor slash commands.
+
 That's it. The AI walks you through everything:
 - 🔑 **API Key** - Paste your publishable key, done
 - 🎨 **Branding** - Tell it your app name, it writes your headlines
