@@ -68,3 +68,4 @@ temp/
 .cloudflare
 .env.production
 
+package-lock.json

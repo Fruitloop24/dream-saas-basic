@@ -19,7 +19,12 @@
 
 ## Quick Start
 
-Open this project in **Claude Code**, **Cursor**, or **Windsurf** and run:
+```bash
+git clone https://github.com/Fruitloop24/dream-saas-basic.git my-saas
+cd my-saas
+```
+
+Open in **Claude Code**, **Cursor**, or **Windsurf** and run:
 
 ```
 /setup
